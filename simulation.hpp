@@ -4,12 +4,13 @@
 
 #pragma once
 #include "grid.hpp"
+#include "raylib.h"
 
 class Simulation {
     public:
         Simulation(int width, int height, int cellSize)
             : grid(width, height, cellSize), temp_grid(width, height, cellSize), run(false) {};
-        void Draw();
+        void Draw(Color aliveColor, Color deadColor);
         void SetCellValue(int row, int column, int value);
         int CountLiveNeighbors(int row, int column);
         void Update();

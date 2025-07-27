@@ -7,9 +7,9 @@
 #include "simulation.hpp"
 
 
-void Simulation::Draw()
+void Simulation::Draw(Color aliveColor, Color deadColor)
 {
-    grid.Draw();
+    grid.Draw(aliveColor, deadColor);
 }
 
 void Simulation::SetCellValue(int row, int column, int value)

@@ -6,13 +6,13 @@
 #include "grid.hpp"
 
 
-void Grid::Draw()
+void Grid::Draw(Color aliveColor, Color deadColor)
 {
     for (int row = 0; row < rows; row++)
     {
         for (int column = 0; column < columns; column++)
         {
-            Color color = cells[row][column] ? Color(255, 255, 255, 255) : Color(40, 40, 40, 255);
+            Color color = cells[row][column] ? aliveColor : deadColor;
             DrawRectangle(column * cellSize, row * cellSize, cellSize -1, cellSize -1, color);
         }
     }
