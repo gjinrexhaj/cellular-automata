@@ -27,8 +27,8 @@ int main()
     bool showFps = true;
     bool showNewWindow = false;
 
-    char textBuf1[64] = "Window Width ";
-    char textBuf2[64] = "Window Height ";
+    char textBuf1[64] = "Boundary Width ";
+    char textBuf2[64] = "Boundary Height ";
     char textBuf3[64] = "Cell Size ";
     int value1 = 750;
     int value2 = 750;
