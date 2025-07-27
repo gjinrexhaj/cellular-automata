@@ -147,6 +147,14 @@ int main()
         if (showFps)
         {
             DrawText(TextFormat("FPS: %d", GetFPS()), 10, 10, 20, fontColor);
+            if (running)
+            {
+                DrawText(TextFormat("Running"), GetScreenWidth() - 90, 10, 20, fontColor);
+            }
+            else
+            {
+                DrawText(TextFormat("Idle"), GetScreenWidth() - 50, 10, 20, fontColor);
+            }
         }
 
         // NEW WINDOW DIALOG MENU
