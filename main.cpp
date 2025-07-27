@@ -184,7 +184,7 @@ int main()
         // COLOR PICKER DIALOG MENU
         if (showColorPickerWindow)
         {
-            Rectangle dialogRect = { 0, 0, 200, 300 };
+            Rectangle dialogRect = { (float)GetScreenWidth()-200, 0, 200, 300 };
 
             if (GuiWindowBox(dialogRect, "Color Picker"))
             {
