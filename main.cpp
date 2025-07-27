@@ -16,10 +16,10 @@ int main()
 {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    Color gridlineColor = Color(0, 0, 0 , 255);
+    Color gridlineColor = Color(20, 20, 20 , 255);
     Color aliveColor = Color(255, 255, 255, 255);
     Color deadColor = Color(40, 40, 40, 255);
-    Color fontColor = GRAY;
+    Color fontColor = Color(170, 170, 170, 255);
 
     const int WINDOW_WIDTH = 750;
     const int WINDOW_HEIGHT = 750;
