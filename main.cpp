@@ -3,7 +3,7 @@
 //
 
 #define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
+#include "external/raygui.h"
 #include <raylib.h>
 #include <iostream>
 #include "simulation.hpp"
