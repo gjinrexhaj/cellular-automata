@@ -1,0 +1,7 @@
+1. UNDERPOPULATION: Any live cell with fewer than two live neighbors die
+
+2. STATIS: Any live cell with two or three live neighbors lives on to the next generation
+
+3. OVERPOPULATION: Any live cell with more than three live neighbors dies
+
+4. REPRODUCTION: Any dead cell with exactly three live neighbors becomes a live cell
