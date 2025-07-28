@@ -10,6 +10,8 @@ simulate Conway's game of life with the following features:
 - Adjustable framerate
 - Cell clearing, randomization, and cell placement using the mouse
 
+Video showcase available at [this link](https://www.youtube.com/watch?v=qYmX0MMCitA).
+
 GitHub will serve as our primary platform for code.
 
 ![til](./readme-docs/ui.gif)
