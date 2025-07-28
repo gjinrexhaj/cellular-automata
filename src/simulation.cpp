@@ -95,26 +95,39 @@ void Simulation::Update()
 
 void Simulation::ClearGrid()
 {
-    if (!IsRunning())
-    {
-        grid.Clear();
-    }
+    grid.Clear();
 }
 
 void Simulation::CreateRandomState()
 {
-    if (!IsRunning())
-    {
-        grid.FillRandom();
-    }
+    grid.FillRandom();
 }
 
-void Simulation::ToggleCell(int row, int column)
+void Simulation::ToggleCell(int row, int column, int brushSize)
 {
-    if (!IsRunning())
+    // TODO: implement brush size here
+    grid.ToggleCell(row, column);
+
+    for (int i = 1; i < brushSize; i++)
     {
-        grid.ToggleCell(row, column);
+        // up
+        grid.ToggleCell(row-i, column);
+        // down
+        grid.ToggleCell(row+i, column);
+        // left
+        grid.ToggleCell(row, column-i);
+        // right
+        grid.ToggleCell(row, column+i);
+        // upright
+        grid.ToggleCell(row-i, column+i);
+        // upleft
+        grid.ToggleCell(row-i, column-i);
+        // downright
+        grid.ToggleCell(row+i, column+i);
+        // downleft
+        grid.ToggleCell(row+i, column-i);
     }
+
 }
 
 

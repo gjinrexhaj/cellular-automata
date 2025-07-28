@@ -20,7 +20,7 @@ class Simulation {
         void Stop() {run = false;}
         void ClearGrid();
         void CreateRandomState();
-        void ToggleCell(int row, int column);
+        void ToggleCell(int row, int column, int brushSize);
     private:
         Grid grid;
         Grid temp_grid;

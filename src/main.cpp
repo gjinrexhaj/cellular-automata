@@ -30,18 +30,11 @@ int main()
     bool showFps = true;
     bool showNewEnvironmentWindow = false;
     bool showColorPickerWindow = false;
-
-    char textBuf1[64] = "Boundary Width ";
-    char textBuf2[64] = "Boundary Height ";
-    char textBuf3[64] = "Cell Size ";
-    char textBuf4[64] = "Gridline Color ";
-    char textBuf5[64] = "Alive Color ";
-    char textBuf6[64] = "Dead Color ";
-    char textBuf7[64] = "Font Color ";
-    char textBuf8[64] = "";
-    char textBuf9[64] = "Gridline Thickness";
+    bool showSettingsWindow = false;
 
     float lineThickness = 1;
+    int brushSize = 1;
+
     int value1 = WINDOW_WIDTH;
     int value2 = WINDOW_HEIGHT;
     int value3 = cellSize;
@@ -49,6 +42,12 @@ int main()
     bool focus1 = false;
     bool focus2 = false;
     bool focus3 = false;
+    bool focus4 = false;
+
+    bool allowEditingWhileRunning = false;
+    bool allowKeybindsDuringSimulation = false;
+    bool darkMode = true;
+    bool autoResizeEnvironment = false;
 
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "GoL Canvas - IDLE");
@@ -65,6 +64,7 @@ int main()
         "R: randomize grid (sim must be stopped)\n"
         "F: toggle fps counter\n"
         "N: change simulation environment\n"
+        "D: change settings\n"
         "LMOUSE: draw cells (sim must be stopped)\n"
         "RMOUSE: erase cells (sim must be stopped)\n"
         "ENTER: toggle simulation\n"
@@ -79,6 +79,12 @@ int main()
         {
             value1 = GetScreenWidth();
             value2 = GetScreenHeight();
+            if (autoResizeEnvironment)
+            {
+                value1 = GetScreenWidth();
+                value2 = GetScreenHeight();
+                simulation = Simulation(value1, value2, value3);
+            }
         }
 
         // place cell
@@ -87,9 +93,13 @@ int main()
             Vector2 mousePosition = GetMousePosition();
             int row = mousePosition.y / cellSize;
             int column = mousePosition.x / cellSize;
-            if (simulation.GetCellValue(row, column) == 0)
+
+            if (!simulation.IsRunning() || allowEditingWhileRunning)
             {
-                simulation.ToggleCell(row, column);
+                if (simulation.GetCellValue(row, column) == 0)
+                {
+                    simulation.ToggleCell(row, column, brushSize);
+                }
             }
         }
         // remove cell
@@ -98,9 +108,13 @@ int main()
             Vector2 mousePosition = GetMousePosition();
             int row = mousePosition.y / cellSize;
             int column = mousePosition.x / cellSize;
-            if (simulation.GetCellValue(row, column) == 1)
+
+            if (!simulation.IsRunning() || allowEditingWhileRunning)
             {
-                simulation.ToggleCell(row, column);
+                if (simulation.GetCellValue(row, column) == 1)
+                {
+                    simulation.ToggleCell(row, column, brushSize);
+                }
             }
         }
 
@@ -139,11 +153,15 @@ int main()
         }
         else if (IsKeyPressed(KEY_R))
         {
-            simulation.CreateRandomState();
+            if (!simulation.IsRunning() || allowKeybindsDuringSimulation) {
+                simulation.CreateRandomState();
+            }
         }
         else if (IsKeyPressed(KEY_C))
         {
-            simulation.ClearGrid();
+            if (!simulation.IsRunning() || allowKeybindsDuringSimulation) {
+                simulation.ClearGrid();
+            }
         }
         else if (IsKeyPressed(KEY_Q))
         {
@@ -163,6 +181,11 @@ int main()
             std::cout << "Show color picker panel" << std::endl;
             showColorPickerWindow = !showColorPickerWindow;
         }
+        else if (IsKeyPressed(KEY_D))
+        {
+            std::cout << "Show settings panel" << std::endl;
+            showSettingsWindow = !showSettingsWindow;
+        }
 
         // Update State
         simulation.Update();
@@ -173,7 +196,7 @@ int main()
         simulation.Draw(aliveColor, deadColor, lineThickness);
         if (showText)
         {
-            DrawText(controls.c_str(), 10, GetScreenHeight() - 265, 20, fontColor);
+            DrawText(controls.c_str(), 10, GetScreenHeight() - 290, 20, fontColor);
         }
         if (showFps)
         {
@@ -198,9 +221,7 @@ int main()
                 showNewEnvironmentWindow = false; // Close the dialog if the close button is pressed
             }
 
-
-
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, textBuf1, &value1, 1, 2000, focus1))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, "Boundary Width ", &value1, 1, 2000, focus1))
             {
                 std::cout<<"spinner1 req focus"<<std::endl;
                 focus1 = true;
@@ -208,7 +229,7 @@ int main()
                 focus3 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, textBuf2, &value2, 1, 2000, focus2))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &value2, 1, 2000, focus2))
             {
                 std::cout<<"spinner2 req focus"<<std::endl;
                 focus1 = false;
@@ -216,7 +237,7 @@ int main()
                 focus3 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, textBuf3, &value3, 1, 50, focus3))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &value3, 1, 50, focus3))
             {
                 std::cout<<"spinner3 req focus"<<std::endl;
                 focus1 = false;
@@ -224,8 +245,8 @@ int main()
                 focus3 = true;
             }
 
-            GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete\nyour current environment!");
-
+            GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete");
+            GuiLabel({dialogRect.x + 10, dialogRect.y + 175, 240, 20 }, "your current environment!");
 
             if (GuiButton((Rectangle){ dialogRect.x + 50, dialogRect.y + 200, 100, 30 }, "CREATE"))
             {
@@ -252,23 +273,54 @@ int main()
                 showColorPickerWindow = false; // Close the dialog if the close button is pressed
             }
 
+            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 40, 80, 50}, "Gridline Color ", &gridlineColor);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 40, 120, 50}, "Gridline Color ");
+            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 100, 80, 50}, "Alive Color ", &aliveColor);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 100, 120, 50}, "Alive Color ");
+            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 160, 80, 50}, "Dead Color ", &deadColor);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 160, 120, 50}, "Dead Color ");
+            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 220, 80, 50}, "Font Color ", &fontColor);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 220, 120, 50}, "Font Color");
+            GuiSlider({dialogRect.x + 10, dialogRect.y + 280, 80, 50}, "", "", &lineThickness, 0, 3);
+            GuiLabel({dialogRect.x + 100, dialogRect.y + 280, 130, 50}, "Gridline Thickness");
+        }
 
+        // SETTINGS DIALOG MENU
+        if (showSettingsWindow)
+        {
 
-            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 40, 80, 50}, textBuf4, &gridlineColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 40, 120, 50}, textBuf4);
+            Rectangle dialogRect = {0, (float)GetScreenHeight()-350, 300, 350 };
 
-            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 100, 80, 50}, textBuf5, &aliveColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 100, 120, 50}, textBuf5);
+            if (GuiWindowBox(dialogRect, "Settings"))
+            {
+                showSettingsWindow = false; // Close the dialog if the close button is pressed
+            }
 
-            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 160, 80, 50}, textBuf6, &deadColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 160, 120, 50}, textBuf6);
+            // add brush shape, options, etc,
+            if (GuiCheckBox({dialogRect.x + 15, dialogRect.y + 40, 20, 20}, " Dark mode", &darkMode))
+            {
+                if (darkMode)
+                {
+                    GuiLoadStyleDefault();
+                    GuiLoadStyle("../styles/custom-dark.rgs");
+                } else
+                {
+                    GuiLoadStyleDefault();
+                    GuiLoadStyle("../styles/custom-light.rgs");
+                }
+            }
 
-            GuiColorPicker({dialogRect.x + 10, dialogRect.y + 220, 80, 50}, textBuf7, &fontColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 220, 120, 50}, textBuf7);
-
-            GuiSlider({dialogRect.x + 10, dialogRect.y + 280, 80, 50}, textBuf8, textBuf8, &lineThickness, 0, 3);
-            GuiLabel({dialogRect.x + 100, dialogRect.y + 280, 120, 50}, textBuf9);
-
+            // TODO: implement brush size feature
+            GuiCheckBox({dialogRect.x + 15, dialogRect.y + 80, 20, 20}, " allow drawing during simulation", &allowEditingWhileRunning);
+            GuiCheckBox({dialogRect.x + 15, dialogRect.y + 120, 20, 20}, " allow C/R keys during simulation", &allowKeybindsDuringSimulation);
+            GuiCheckBox({dialogRect.x + 15, dialogRect.y + 160, 20, 20}, " create new envrmt on window resize", &autoResizeEnvironment);
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 200, 100, 20}, "Brush/Eraser Size    ", &brushSize, 1, 200, focus4))
+            {
+                focus1 = false;
+                focus2 = false;
+                focus3 = false;
+                focus4 = true;
+            }
         }
 
         EndDrawing();
