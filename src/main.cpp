@@ -9,7 +9,6 @@
 #include "simulation.hpp"
 
 
-// TODO: fix spinner focus issue
 // TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
 
 
@@ -20,11 +19,11 @@ int main()
     Color gridlineColor = Color(20, 20, 20 , 255);
     Color aliveColor = Color(255, 255, 255, 255);
     Color deadColor = Color(40, 40, 40, 255);
-    Color fontColor = Color(170, 170, 170, 255);
+    Color fontColor = Color(255, 255, 255, 255);
 
-    const int WINDOW_WIDTH = 750;
-    const int WINDOW_HEIGHT = 750;
-    int cellSize = 15;
+    const int WINDOW_WIDTH = 950;
+    const int WINDOW_HEIGHT = 650;
+    int cellSize = 10;
     int fps = 30;
     bool running = false;
     bool showText = true;
@@ -43,12 +42,18 @@ int main()
     char textBuf9[64] = "Gridline Thickness";
 
     float lineThickness = 1;
-    int value1 = 750;
-    int value2 = 750;
-    int value3 = 15;
+    int value1 = WINDOW_WIDTH;
+    int value2 = WINDOW_HEIGHT;
+    int value3 = cellSize;
+
+    bool focus1 = false;
+    bool focus2 = false;
+    bool focus3 = false;
 
 
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "GoL Canvas - IDLE");
+    GuiLoadStyle("../styles/custom-dark.rgs");
+
     SetTargetFPS(fps);
     Simulation simulation(WINDOW_WIDTH, WINDOW_HEIGHT, cellSize);
 
@@ -101,6 +106,11 @@ int main()
 
         if (IsKeyPressed(KEY_ENTER))
         {
+            focus1 = false;
+            focus2 = false;
+            focus3 = false;
+
+
             running = !running;
 
             if (running)
@@ -181,7 +191,7 @@ int main()
         // NEW WINDOW DIALOG MENU
         if (showNewEnvironmentWindow)
         {
-            Rectangle dialogRect = { 0, 0, 200, 220 };
+            Rectangle dialogRect = { 0, 0, 225, 250 };
 
             if (GuiWindowBox(dialogRect, "Create New Environment"))
             {
@@ -190,14 +200,34 @@ int main()
 
 
 
-            GuiSpinner({dialogRect.x + 100, dialogRect.y + 40, 80, 20}, textBuf1, &value1, 0, 2000, true);
-            GuiSpinner({dialogRect.x + 100, dialogRect.y + 70, 80, 20}, textBuf2, &value2, 0, 2000, true);
-            GuiSpinner({dialogRect.x + 100, dialogRect.y + 100, 80, 20}, textBuf3, &value3, 0, 50, true);
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, textBuf1, &value1, 0, 2000, focus1))
+            {
+                std::cout<<"spinner1 req focus"<<std::endl;
+                focus1 = true;
+                focus2 = false;
+                focus3 = false;
+            }
 
-            GuiLabel({dialogRect.x + 10, dialogRect.y + 140, 240, 20 }, "Warning! This action will delete\nyour current environment!");
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, textBuf2, &value2, 0, 2000, focus2))
+            {
+                std::cout<<"spinner2 req focus"<<std::endl;
+                focus1 = false;
+                focus2 = true;
+                focus3 = false;
+            }
+
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, textBuf3, &value3, 0, 50, focus3))
+            {
+                std::cout<<"spinner3 req focus"<<std::endl;
+                focus1 = false;
+                focus2 = false;
+                focus3 = true;
+            }
+
+            GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete\nyour current environment!");
 
 
-            if (GuiButton((Rectangle){ dialogRect.x + 50, dialogRect.y + 180, 100, 30 }, "CREATE"))
+            if (GuiButton((Rectangle){ dialogRect.x + 50, dialogRect.y + 200, 100, 30 }, "CREATE"))
             {
                 std::cout << "value1: " << value1 << std::endl;
                 std::cout << "value2: " << value2 << std::endl;
@@ -215,7 +245,7 @@ int main()
         // COLOR PICKER DIALOG MENU
         if (showColorPickerWindow)
         {
-            Rectangle dialogRect = { (float)GetScreenWidth()-200, 0, 200, 350 };
+            Rectangle dialogRect = { (float)GetScreenWidth()-250, 0, 250, 350 };
 
             if (GuiWindowBox(dialogRect, "Color Picker"))
             {
@@ -225,19 +255,19 @@ int main()
 
 
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 40, 80, 50}, textBuf4, &gridlineColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 40, 80, 50}, textBuf4);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 40, 120, 50}, textBuf4);
 
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 100, 80, 50}, textBuf5, &aliveColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 100, 80, 50}, textBuf5);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 100, 120, 50}, textBuf5);
 
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 160, 80, 50}, textBuf6, &deadColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 160, 80, 50}, textBuf6);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 160, 120, 50}, textBuf6);
 
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 220, 80, 50}, textBuf7, &fontColor);
-            GuiLabel({dialogRect.x + 120, dialogRect.y + 220, 80, 50}, textBuf7);
+            GuiLabel({dialogRect.x + 120, dialogRect.y + 220, 120, 50}, textBuf7);
 
             GuiSlider({dialogRect.x + 10, dialogRect.y + 280, 80, 50}, textBuf8, textBuf8, &lineThickness, 0, 3);
-            GuiLabel({dialogRect.x + 100, dialogRect.y + 280, 100, 50}, textBuf9);
+            GuiLabel({dialogRect.x + 100, dialogRect.y + 280, 120, 50}, textBuf9);
 
         }
 
