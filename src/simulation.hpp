@@ -10,7 +10,7 @@ class Simulation {
     public:
         Simulation(int width, int height, int cellSize)
             : grid(width, height, cellSize), temp_grid(width, height, cellSize), run(false) {};
-        void Draw(Color aliveColor, Color deadColor);
+        void Draw(Color aliveColor, Color deadColor, float lineThickness);
         void SetCellValue(int row, int column, int value);
         int GetCellValue(int row, int column);
         int CountLiveNeighbors(int row, int column);

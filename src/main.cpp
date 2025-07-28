@@ -39,6 +39,10 @@ int main()
     char textBuf5[64] = "Alive Color ";
     char textBuf6[64] = "Dead Color ";
     char textBuf7[64] = "Font Color ";
+    char textBuf8[64] = "";
+    char textBuf9[64] = "Gridline Thickness";
+
+    float lineThickness = 1;
     int value1 = 750;
     int value2 = 750;
     int value3 = 15;
@@ -156,7 +160,7 @@ int main()
         // Drawing to Screen
         BeginDrawing();
         ClearBackground(gridlineColor);
-        simulation.Draw(aliveColor, deadColor);
+        simulation.Draw(aliveColor, deadColor, lineThickness);
         if (showText)
         {
             DrawText(controls.c_str(), 10, GetScreenHeight() - 265, 20, fontColor);
@@ -184,6 +188,8 @@ int main()
                 showNewEnvironmentWindow = false; // Close the dialog if the close button is pressed
             }
 
+
+
             GuiSpinner({dialogRect.x + 100, dialogRect.y + 40, 80, 20}, textBuf1, &value1, 0, 2000, true);
             GuiSpinner({dialogRect.x + 100, dialogRect.y + 70, 80, 20}, textBuf2, &value2, 0, 2000, true);
             GuiSpinner({dialogRect.x + 100, dialogRect.y + 100, 80, 20}, textBuf3, &value3, 0, 50, true);
@@ -209,7 +215,7 @@ int main()
         // COLOR PICKER DIALOG MENU
         if (showColorPickerWindow)
         {
-            Rectangle dialogRect = { (float)GetScreenWidth()-200, 0, 200, 300 };
+            Rectangle dialogRect = { (float)GetScreenWidth()-200, 0, 200, 350 };
 
             if (GuiWindowBox(dialogRect, "Color Picker"))
             {
@@ -220,12 +226,19 @@ int main()
 
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 40, 80, 50}, textBuf4, &gridlineColor);
             GuiLabel({dialogRect.x + 120, dialogRect.y + 40, 80, 50}, textBuf4);
+
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 100, 80, 50}, textBuf5, &aliveColor);
             GuiLabel({dialogRect.x + 120, dialogRect.y + 100, 80, 50}, textBuf5);
+
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 160, 80, 50}, textBuf6, &deadColor);
             GuiLabel({dialogRect.x + 120, dialogRect.y + 160, 80, 50}, textBuf6);
+
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 220, 80, 50}, textBuf7, &fontColor);
             GuiLabel({dialogRect.x + 120, dialogRect.y + 220, 80, 50}, textBuf7);
+
+            GuiSlider({dialogRect.x + 10, dialogRect.y + 280, 80, 50}, textBuf8, textBuf8, &lineThickness, 0, 3);
+            GuiLabel({dialogRect.x + 100, dialogRect.y + 280, 100, 50}, textBuf9);
+
         }
 
         EndDrawing();

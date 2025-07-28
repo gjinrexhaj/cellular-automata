@@ -10,7 +10,7 @@ class Grid {
     public:
         Grid(int width, int height, int cellSize)
             : rows(height/cellSize), columns(width/cellSize), cellSize(cellSize),cells(rows, std::vector<int>(columns, 0)) {};
-        void Draw(Color aliveColor, Color deadColor);
+        void Draw(Color aliveColor, Color deadColor, float lineThickness);
         void SetValue(int row, int column, int value);
         int GetValue(int row, int column);
         int GetRows() {return rows;}
