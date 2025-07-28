@@ -200,7 +200,7 @@ int main()
 
 
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, textBuf1, &value1, 0, 2000, focus1))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, textBuf1, &value1, 1, 2000, focus1))
             {
                 std::cout<<"spinner1 req focus"<<std::endl;
                 focus1 = true;
@@ -208,7 +208,7 @@ int main()
                 focus3 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, textBuf2, &value2, 0, 2000, focus2))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, textBuf2, &value2, 1, 2000, focus2))
             {
                 std::cout<<"spinner2 req focus"<<std::endl;
                 focus1 = false;
@@ -216,7 +216,7 @@ int main()
                 focus3 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, textBuf3, &value3, 0, 50, focus3))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, textBuf3, &value3, 1, 50, focus3))
             {
                 std::cout<<"spinner3 req focus"<<std::endl;
                 focus1 = false;
