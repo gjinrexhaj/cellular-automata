@@ -56,6 +56,7 @@ int main()
         "F: toggle fps counter\n"
         "N: change simulation environment\n"
         "LMOUSE: draw cells (sim must be stopped)\n"
+        "RMOUSE: erase cells (sim must be stopped)\n"
         "ENTER: toggle simulation\n"
         "ESC: quit program\n"
         "Q: show/hide this text";
@@ -70,12 +71,27 @@ int main()
             value2 = GetScreenHeight();
         }
 
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) /*&& !showNewWindow*/)
+        // place cell
+        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
         {
             Vector2 mousePosition = GetMousePosition();
             int row = mousePosition.y / cellSize;
             int column = mousePosition.x / cellSize;
-            simulation.ToggleCell(row, column);
+            if (simulation.GetCellValue(row, column) == 0)
+            {
+                simulation.ToggleCell(row, column);
+            }
+        }
+        // remove cell
+        if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
+        {
+            Vector2 mousePosition = GetMousePosition();
+            int row = mousePosition.y / cellSize;
+            int column = mousePosition.x / cellSize;
+            if (simulation.GetCellValue(row, column) == 1)
+            {
+                simulation.ToggleCell(row, column);
+            }
         }
 
         if (IsKeyPressed(KEY_ENTER))
@@ -142,7 +158,7 @@ int main()
         simulation.Draw(aliveColor, deadColor);
         if (showText)
         {
-            DrawText(controls.c_str(), 10, GetScreenHeight() - 245, 20, fontColor);
+            DrawText(controls.c_str(), 10, GetScreenHeight() - 265, 20, fontColor);
         }
         if (showFps)
         {

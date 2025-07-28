@@ -12,6 +12,7 @@ class Simulation {
             : grid(width, height, cellSize), temp_grid(width, height, cellSize), run(false) {};
         void Draw(Color aliveColor, Color deadColor);
         void SetCellValue(int row, int column, int value);
+        int GetCellValue(int row, int column);
         int CountLiveNeighbors(int row, int column);
         void Update();
         bool IsRunning() { return run; }

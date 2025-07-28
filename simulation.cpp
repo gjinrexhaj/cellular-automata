@@ -17,6 +17,11 @@ void Simulation::SetCellValue(int row, int column, int value)
     grid.SetValue(row, column, value);
 }
 
+int Simulation::GetCellValue(int row, int column)
+{
+    return grid.GetValue(row, column);
+}
+
 int Simulation::CountLiveNeighbors(int row, int column)
 {
     int liveNeighbors = 0;

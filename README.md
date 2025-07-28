@@ -24,7 +24,8 @@ GitHub will serve as our primary platform for code.
 | R     | randomize grid     |
 | F     | fps counter        |
 | N     | change environment |
-| LMB   | place cells        |
+| LMB   | place cell         |
+| RMB   | remove cell        |
 | ENTER | toggle simulation  |
 | ESC   | quit program       |
 | Q     | keybind guide      |
