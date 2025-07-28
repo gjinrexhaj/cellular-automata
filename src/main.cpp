@@ -10,6 +10,9 @@
 
 
 // TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
+// TODO: implement rng density
+// TODO: work on brush size implementation
+// TODO: implement "additive" toggle for fill-random
 
 
 int main()
