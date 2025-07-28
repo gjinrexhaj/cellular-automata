@@ -3,13 +3,14 @@
 //
 
 #define RAYGUI_IMPLEMENTATION
-#include "external/raygui.h"
+#include "../external/raygui.h"
 #include <raylib.h>
 #include <iostream>
 #include "simulation.hpp"
 
 
 // TODO: fix spinner focus issue
+// TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
 
 
 int main()
