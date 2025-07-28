@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.31)
-project(game_of_life)
+project(cellular-automata)
 set(CMAKE_CXX_STANDARD 20)
 
 
@@ -22,6 +22,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif ()
 
 
-add_executable(game_of_life src/main.cpp src/grid.cpp src/simulation.cpp)
-target_link_libraries(game_of_life raylib)
+add_executable(cellular-automata src/main.cpp src/grid.cpp src/simulation.cpp)
+target_link_libraries(cellular-automata raylib)
 
