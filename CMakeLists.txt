@@ -11,8 +11,8 @@ endif ()
 
 if(WIN32)
     message("Building on Windows!")
-    include_directories("./external/raylib-5.5_win64_mingw-w64/include")
-    link_directories("./external/raylib-5.5_win64_mingw-w64/lib")
+    include_directories("./external/raylib-5.5_win64_msvc16/include")
+    link_directories("./external/raylib-5.5_win64_msvc16/lib")
 endif ()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
