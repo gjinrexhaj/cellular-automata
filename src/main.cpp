@@ -19,33 +19,31 @@ int main()
 {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
-    Color gridlineColor = Color(20, 20, 20 , 255);
-    Color aliveColor = Color(255, 255, 255, 255);
-    Color deadColor = Color(40, 40, 40, 255);
-    Color fontColor = Color(255, 255, 255, 255);
+    auto gridlineColor = Color(20, 20, 20 , 255);
+    auto aliveColor = Color(255, 255, 255, 255);
+    auto deadColor = Color(40, 40, 40, 255);
+    auto fontColor = Color(255, 255, 255, 255);
 
-    const int WINDOW_WIDTH = 950;
-    const int WINDOW_HEIGHT = 650;
+    int windowWidth = 950;
+    int windowHeight = 650;
     int cellSize = 10;
     int fps = 30;
-    bool running = false;
-    bool showText = true;
-    bool showFps = true;
-    bool showNewEnvironmentWindow = false;
-    bool showColorPickerWindow = false;
-    bool showSettingsWindow = false;
 
     float lineThickness = 1;
     int brushSize = 1;
 
-    int value1 = WINDOW_WIDTH;
-    int value2 = WINDOW_HEIGHT;
-    int value3 = cellSize;
+    bool running = false;
+    bool showText = true;
+    bool showFps = true;
 
-    bool focus1 = false;
-    bool focus2 = false;
-    bool focus3 = false;
-    bool focus4 = false;
+    bool showCreateNewEnvironmentPanel = false;
+    bool showColorPickerPanel = false;
+    bool showSettingsPanel = false;
+
+    bool guiFocus1 = false;
+    bool guiFocus2 = false;
+    bool guiFocus3 = false;
+    bool guiFocus4 = false;
 
     bool allowEditingWhileRunning = false;
     bool allowKeybindsDuringSimulation = false;
@@ -53,11 +51,11 @@ int main()
     bool autoResizeEnvironment = false;
 
 
-    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "GoL Canvas - IDLE");
+    InitWindow(windowWidth, windowHeight, "GoL Canvas - IDLE");
     GuiLoadStyle("../styles/custom-dark.rgs");
 
     SetTargetFPS(fps);
-    Simulation simulation(WINDOW_WIDTH, WINDOW_HEIGHT, cellSize);
+    Simulation simulation(windowWidth, windowHeight, cellSize);
 
     std::string controls =
         "A: decrease fps cap\n"
@@ -80,13 +78,11 @@ int main()
         // Handle Events
         if (IsWindowResized())
         {
-            value1 = GetScreenWidth();
-            value2 = GetScreenHeight();
+            windowWidth = GetScreenWidth();
+            windowHeight = GetScreenHeight();
             if (autoResizeEnvironment)
             {
-                value1 = GetScreenWidth();
-                value2 = GetScreenHeight();
-                simulation = Simulation(value1, value2, value3);
+                simulation = Simulation(windowWidth, windowHeight, cellSize);
             }
         }
 
@@ -123,9 +119,9 @@ int main()
 
         if (IsKeyPressed(KEY_ENTER))
         {
-            focus1 = false;
-            focus2 = false;
-            focus3 = false;
+            guiFocus1 = false;
+            guiFocus2 = false;
+            guiFocus3 = false;
 
 
             running = !running;
@@ -177,17 +173,17 @@ int main()
         else if (IsKeyPressed(KEY_N))
         {
             std::cout << "Show new environment panel" << std::endl;
-            showNewEnvironmentWindow = !showNewEnvironmentWindow;
+            showCreateNewEnvironmentPanel = !showCreateNewEnvironmentPanel;
         }
         else if (IsKeyPressed(KEY_P))
         {
             std::cout << "Show color picker panel" << std::endl;
-            showColorPickerWindow = !showColorPickerWindow;
+            showColorPickerPanel = !showColorPickerPanel;
         }
         else if (IsKeyPressed(KEY_D))
         {
             std::cout << "Show settings panel" << std::endl;
-            showSettingsWindow = !showSettingsWindow;
+            showSettingsPanel = !showSettingsPanel;
         }
 
         // Update State
@@ -215,37 +211,37 @@ int main()
         }
 
         // NEW WINDOW DIALOG MENU
-        if (showNewEnvironmentWindow)
+        if (showCreateNewEnvironmentPanel)
         {
             Rectangle dialogRect = { 0, 0, 225, 250 };
 
             if (GuiWindowBox(dialogRect, "Create New Environment"))
             {
-                showNewEnvironmentWindow = false; // Close the dialog if the close button is pressed
+                showCreateNewEnvironmentPanel = false; // Close the dialog if the close button is pressed
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, "Boundary Width ", &value1, 1, 2000, focus1))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, "Boundary Width ", &windowWidth, 1, 2000, guiFocus1))
             {
                 std::cout<<"spinner1 req focus"<<std::endl;
-                focus1 = true;
-                focus2 = false;
-                focus3 = false;
+                guiFocus1 = true;
+                guiFocus2 = false;
+                guiFocus3 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &value2, 1, 2000, focus2))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &windowHeight, 1, 2000, guiFocus2))
             {
                 std::cout<<"spinner2 req focus"<<std::endl;
-                focus1 = false;
-                focus2 = true;
-                focus3 = false;
+                guiFocus1 = false;
+                guiFocus2 = true;
+                guiFocus3 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &value3, 1, 50, focus3))
+            if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &cellSize, 1, 50, guiFocus3))
             {
                 std::cout<<"spinner3 req focus"<<std::endl;
-                focus1 = false;
-                focus2 = false;
-                focus3 = true;
+                guiFocus1 = false;
+                guiFocus2 = false;
+                guiFocus3 = true;
             }
 
             GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete");
@@ -253,27 +249,26 @@ int main()
 
             if (GuiButton((Rectangle){ dialogRect.x + 50, dialogRect.y + 200, 100, 30 }, "CREATE"))
             {
-                std::cout << "value1: " << value1 << std::endl;
-                std::cout << "value2: " << value2 << std::endl;
-                std::cout << "value3: " << value3 << std::endl;
+                std::cout << "value1: " << windowWidth << std::endl;
+                std::cout << "value2: " << windowHeight << std::endl;
+                std::cout << "value3: " << cellSize << std::endl;
                 SetWindowTitle("GoL Canvas - IDLE");
-                cellSize = value3;
 
-                SetWindowSize(value1, value2);
+                SetWindowSize(windowWidth, windowHeight);
 
-                simulation = Simulation(value1, value2, value3);
+                simulation = Simulation(windowWidth, windowHeight, cellSize);
                 running = false;
             }
         }
 
         // COLOR PICKER DIALOG MENU
-        if (showColorPickerWindow)
+        if (showColorPickerPanel)
         {
             Rectangle dialogRect = { (float)GetScreenWidth()-250, 0, 250, 350 };
 
             if (GuiWindowBox(dialogRect, "Color Picker"))
             {
-                showColorPickerWindow = false; // Close the dialog if the close button is pressed
+                showColorPickerPanel = false; // Close the dialog if the close button is pressed
             }
 
             GuiColorPicker({dialogRect.x + 10, dialogRect.y + 40, 80, 50}, "Gridline Color ", &gridlineColor);
@@ -289,14 +284,14 @@ int main()
         }
 
         // SETTINGS DIALOG MENU
-        if (showSettingsWindow)
+        if (showSettingsPanel)
         {
 
             Rectangle dialogRect = {0, (float)GetScreenHeight()-350, 300, 350 };
 
             if (GuiWindowBox(dialogRect, "Settings"))
             {
-                showSettingsWindow = false; // Close the dialog if the close button is pressed
+                showSettingsPanel = false; // Close the dialog if the close button is pressed
             }
 
             // add brush shape, options, etc,
@@ -313,16 +308,16 @@ int main()
                 }
             }
 
-            // TODO: implement brush size feature
+            // TODO: fully implement brush size feature
             GuiCheckBox({dialogRect.x + 15, dialogRect.y + 80, 20, 20}, " allow drawing during simulation", &allowEditingWhileRunning);
             GuiCheckBox({dialogRect.x + 15, dialogRect.y + 120, 20, 20}, " allow C/R keys during simulation", &allowKeybindsDuringSimulation);
             GuiCheckBox({dialogRect.x + 15, dialogRect.y + 160, 20, 20}, " create new envrmt on window resize", &autoResizeEnvironment);
-            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 200, 100, 20}, "Brush/Eraser Size    ", &brushSize, 1, 200, focus4))
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 200, 100, 20}, "Brush/Eraser Size    ", &brushSize, 1, 300, guiFocus4))
             {
-                focus1 = false;
-                focus2 = false;
-                focus3 = false;
-                focus4 = true;
+                guiFocus1 = false;
+                guiFocus2 = false;
+                guiFocus3 = false;
+                guiFocus4 = true;
             }
         }
 
