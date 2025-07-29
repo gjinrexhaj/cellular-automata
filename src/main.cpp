@@ -247,7 +247,7 @@ int main()
             GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete");
             GuiLabel({dialogRect.x + 10, dialogRect.y + 175, 240, 20 }, "your current environment!");
 
-            if (GuiButton((Rectangle){ dialogRect.x + 50, dialogRect.y + 200, 100, 30 }, "CREATE"))
+            if (GuiButton({ dialogRect.x + 50, dialogRect.y + 200, 100, 30 }, "CREATE"))
             {
                 std::cout << "value1: " << windowWidth << std::endl;
                 std::cout << "value2: " << windowHeight << std::endl;
