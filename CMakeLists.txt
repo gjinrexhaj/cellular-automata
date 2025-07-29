@@ -23,5 +23,12 @@ endif ()
 
 
 add_executable(cellular-automata src/main.cpp src/grid.cpp src/simulation.cpp)
-target_link_libraries(cellular-automata raylib)
+
+
+# Explicity link win multimedia if building for win32
+if (WIN32)
+    target_link_libraries(cellular-automata raylib Winmm)
+else ()
+    target_link_libraries(cellular-automata raylib)
+endif ()
 
