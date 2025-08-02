@@ -31,6 +31,7 @@ int main()
 
     float lineThickness = 1;
     int brushSize = 1;
+    int rngDensity = 6;
 
     bool running = false;
     bool showText = true;
@@ -44,6 +45,7 @@ int main()
     bool guiFocus2 = false;
     bool guiFocus3 = false;
     bool guiFocus4 = false;
+    bool guiFocus5 = false;
 
     bool allowEditingWhileRunning = false;
     bool allowKeybindsDuringSimulation = false;
@@ -153,7 +155,7 @@ int main()
         else if (IsKeyPressed(KEY_R))
         {
             if (!simulation.IsRunning() || allowKeybindsDuringSimulation) {
-                simulation.CreateRandomState();
+                simulation.CreateRandomState(rngDensity);
             }
         }
         else if (IsKeyPressed(KEY_C))
@@ -318,6 +320,16 @@ int main()
                 guiFocus2 = false;
                 guiFocus3 = false;
                 guiFocus4 = true;
+                guiFocus5 = false;
+            }
+
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 240, 100, 20}, "RNG sparsity    ", &rngDensity, 1, 100, guiFocus5))
+            {
+                guiFocus1 = false;
+                guiFocus2 = false;
+                guiFocus3 = false;
+                guiFocus4 = false;
+                guiFocus5 = true;
             }
         }
 

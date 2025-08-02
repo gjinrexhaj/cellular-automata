@@ -15,7 +15,7 @@ class Grid {
         int GetValue(int row, int column);
         int GetRows() {return rows;}
         int GetColumns() {return columns;}
-        void FillRandom();
+        void FillRandom(int density);
         void Clear();
         void ToggleCell(int row, int column);
 

@@ -98,15 +98,19 @@ void Simulation::ClearGrid()
     grid.Clear();
 }
 
-void Simulation::CreateRandomState()
+void Simulation::CreateRandomState(int density)
 {
-    grid.FillRandom();
+    grid.FillRandom(density);
 }
 
 void Simulation::ToggleCell(int row, int column, int brushSize)
 {
     // TODO: implement brush size here
     grid.ToggleCell(row, column);
+
+
+
+
 
     for (int i = 1; i < brushSize; i++)
     {

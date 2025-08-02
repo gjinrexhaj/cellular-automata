@@ -44,14 +44,15 @@ bool Grid::IsWithinBounds(int row, int column)
     return false;
 }
 
-void Grid::FillRandom()
+void Grid::FillRandom(int density)
 {
     for (int row = 0; row < rows; row++)
     {
         for (int column = 0; column < columns; column++)
         {
-            int random = GetRandomValue(0, 4);
-            cells[row][column] = (random == 4) ? 1 : 0;
+            // default density = 4 | lower == higher
+            int random = GetRandomValue(0, density);
+            cells[row][column] = (random == density) ? 1 : 0;
         }
     }
 }
