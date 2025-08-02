@@ -11,7 +11,6 @@
 
 // TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
 // TODO: work on brush size implementation
-// TODO: implement "additive" toggle for fill-random
 
 
 int main()
@@ -329,7 +328,7 @@ int main()
                 guiFocus5 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 1, 100, guiFocus5))
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 0, 100, guiFocus5))
             {
                 guiFocus1 = false;
                 guiFocus2 = false;
