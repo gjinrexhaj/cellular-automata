@@ -19,7 +19,7 @@ class Simulation {
         void Start() {run = true;}
         void Stop() {run = false;}
         void ClearGrid();
-        void CreateRandomState(int density);
+        void CreateRandomState(int density, bool additiveFill);
         void ToggleCell(int row, int column, int brushSize);
     private:
         Grid grid;

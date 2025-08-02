@@ -98,9 +98,9 @@ void Simulation::ClearGrid()
     grid.Clear();
 }
 
-void Simulation::CreateRandomState(int density)
+void Simulation::CreateRandomState(int density, bool additiveFill)
 {
-    grid.FillRandom(density);
+    grid.FillRandom(density, additiveFill);
 }
 
 void Simulation::ToggleCell(int row, int column, int brushSize)

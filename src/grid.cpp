@@ -44,7 +44,7 @@ bool Grid::IsWithinBounds(int row, int column)
     return false;
 }
 
-void Grid::FillRandom(int density)
+void Grid::FillRandom(int density, bool additiveFill)
 {
     for (int row = 0; row < rows; row++)
     {
@@ -52,7 +52,17 @@ void Grid::FillRandom(int density)
         {
             // default density = 4 | lower == higher
             int random = GetRandomValue(0, density);
-            cells[row][column] = (random == density) ? 1 : 0;
+
+
+            if (!additiveFill) {
+                cells[row][column] = (random == density) ? 1 : 0;
+            } else
+            {
+                if (cells[row][column] == 0)
+                {
+                    cells[row][column] = (random == density) ? 1 : 0;
+                }
+            }
         }
     }
 }

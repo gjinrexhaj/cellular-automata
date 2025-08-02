@@ -10,7 +10,6 @@
 
 
 // TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
-// TODO: implement rng density
 // TODO: work on brush size implementation
 // TODO: implement "additive" toggle for fill-random
 
@@ -51,7 +50,7 @@ int main()
     bool allowKeybindsDuringSimulation = false;
     bool darkMode = true;
     bool autoResizeEnvironment = false;
-
+    bool additiveFill = false;
 
     InitWindow(windowWidth, windowHeight, "GoL Canvas - IDLE");
     GuiLoadStyle("../styles/custom-dark.rgs");
@@ -155,7 +154,7 @@ int main()
         else if (IsKeyPressed(KEY_R))
         {
             if (!simulation.IsRunning() || allowKeybindsDuringSimulation) {
-                simulation.CreateRandomState(rngDensity);
+                simulation.CreateRandomState(rngDensity, additiveFill);
             }
         }
         else if (IsKeyPressed(KEY_C))
@@ -228,6 +227,8 @@ int main()
                 guiFocus1 = true;
                 guiFocus2 = false;
                 guiFocus3 = false;
+                guiFocus4 = false;
+                guiFocus5 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &windowHeight, 1, 2000, guiFocus2))
@@ -236,6 +237,8 @@ int main()
                 guiFocus1 = false;
                 guiFocus2 = true;
                 guiFocus3 = false;
+                guiFocus4 = false;
+                guiFocus5 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &cellSize, 1, 50, guiFocus3))
@@ -244,6 +247,8 @@ int main()
                 guiFocus1 = false;
                 guiFocus2 = false;
                 guiFocus3 = true;
+                guiFocus4 = false;
+                guiFocus5 = false;
             }
 
             GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete");
@@ -314,7 +319,8 @@ int main()
             GuiCheckBox({dialogRect.x + 15, dialogRect.y + 80, 20, 20}, " allow drawing during simulation", &allowEditingWhileRunning);
             GuiCheckBox({dialogRect.x + 15, dialogRect.y + 120, 20, 20}, " allow C/R keys during simulation", &allowKeybindsDuringSimulation);
             GuiCheckBox({dialogRect.x + 15, dialogRect.y + 160, 20, 20}, " create new envrmt on window resize", &autoResizeEnvironment);
-            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 200, 100, 20}, "Brush/Eraser Size    ", &brushSize, 1, 300, guiFocus4))
+            GuiCheckBox({dialogRect.x + 15, dialogRect.y + 200, 20, 20}, " additive fill", &additiveFill);
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 240, 100, 20}, "Brush/Eraser Size    ", &brushSize, 1, 300, guiFocus4))
             {
                 guiFocus1 = false;
                 guiFocus2 = false;
@@ -323,7 +329,7 @@ int main()
                 guiFocus5 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 240, 100, 20}, "RNG sparsity    ", &rngDensity, 1, 100, guiFocus5))
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 1, 100, guiFocus5))
             {
                 guiFocus1 = false;
                 guiFocus2 = false;
