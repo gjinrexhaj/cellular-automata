@@ -126,6 +126,7 @@ void Simulation::GameOfLifeAlgorithm()
 
         for (int column = 0; column < grid.GetColumns(); column++)
         {
+            // GET NUM NEIGHBORS AND CURRENT CELL STATE
             int liveNeighbors = CountLiveNeighbors(row, column);
             int cellValue = grid.GetValue(row, column);
 
@@ -170,6 +171,13 @@ void Simulation::GameOfLifeAlgorithm()
 
 void Simulation::HighLifeAlgorithm()
 {
+    // TODO: implement HighLifeAlgorithm()
+
+    // High Life rules
+    // if alive and < 2 neighbors, cell is dead
+    // if alive and > 3 neigbors, cell is dead
+    // otherwise, cell is alive
+    // id dead and == 3 neighbor, cell is alive
     std::cout << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
 }
 
