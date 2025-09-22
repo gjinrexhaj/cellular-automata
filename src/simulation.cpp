@@ -6,6 +6,9 @@
 #include <utility>
 #include "simulation.hpp"
 
+#include <iostream>
+#include <ostream>
+
 
 void Simulation::Draw(Color aliveColor, Color deadColor, float lineThickness)
 {
@@ -50,47 +53,21 @@ int Simulation::CountLiveNeighbors(int row, int column)
 
 void Simulation::Update()
 {
-
     if (!IsRunning())
     {
         return;
     }
 
-    for (int row = 0; row < grid.GetRows(); row++)
+    // Check which simulation type is active, then apply the rules
+    switch (simulationType)
     {
-
-        for (int column = 0; column < grid.GetColumns(); column++)
-        {
-            int liveNeighbors = CountLiveNeighbors(row, column);
-            int cellValue = grid.GetValue(row, column);
-
-            // RULES
-            if (cellValue == 1)
-            {
-                if (liveNeighbors >3 || liveNeighbors < 2)
-                {
-                    temp_grid.SetValue(row, column, 0);
-                }
-                else
-                {
-                    temp_grid.SetValue(row, column, 1);
-                }
-            }
-            else
-            {
-                if (liveNeighbors == 3)
-                {
-                    temp_grid.SetValue(row, column, 1);
-                }
-                else
-                {
-                    temp_grid.SetValue(row, column, 0);
-                }
-            }
-        }
+        case SimulationType::GAME_OF_LIFE:
+            GameOfLifeAlgorithm();
+            break;
+        case SimulationType::HIGH_LIFE:
+            HighLifeAlgorithm();
+            break;
     }
-    // Copy temp_grid to normal grid
-    grid = temp_grid;
 }
 
 void Simulation::ClearGrid()
@@ -110,8 +87,6 @@ void Simulation::ToggleCell(int row, int column, int brushSize)
 
 
 
-
-
     for (int i = 1; i < brushSize; i++)
     {
         // up
@@ -122,17 +97,79 @@ void Simulation::ToggleCell(int row, int column, int brushSize)
         grid.ToggleCell(row, column-i);
         // right
         grid.ToggleCell(row, column+i);
-        // upright
+        // up-right
         grid.ToggleCell(row-i, column+i);
-        // upleft
+        // up-left
         grid.ToggleCell(row-i, column-i);
-        // downright
+        // down-right
         grid.ToggleCell(row+i, column+i);
-        // downleft
+        // down-left
         grid.ToggleCell(row+i, column-i);
     }
 
 }
 
+void Simulation::SetSimulationType(SimulationType type)
+{
+    simulationType = type;
+}
 
+
+////////////////////////////////////
+//  CELLULAR AUTOMATA ALGORITHMS  //
+////////////////////////////////////
+void Simulation::GameOfLifeAlgorithm()
+{
+    // Game of life rules
+    for (int row = 0; row < grid.GetRows(); row++)
+    {
+
+        for (int column = 0; column < grid.GetColumns(); column++)
+        {
+            int liveNeighbors = CountLiveNeighbors(row, column);
+            int cellValue = grid.GetValue(row, column);
+
+            // IF CELL IS ALIVE
+            if (cellValue == 1)
+            {
+                // AND HAS < 3 OR > 2 NEIGHBORS
+                if (liveNeighbors >3 || liveNeighbors < 2)
+                {
+                    // CELL IS DEAD
+                    temp_grid.SetValue(row, column, 0);
+                }
+                // OTHERWISE
+                else
+                {
+                    // CELL IS ALIVE
+                    temp_grid.SetValue(row, column, 1);
+                }
+            }
+            // IF CELL IS DEAD
+            else
+            {
+                // AND HAS 3 NEIGHBORS
+                if (liveNeighbors == 3)
+                {
+                    // CELL IS ALIVE
+                    temp_grid.SetValue(row, column, 1);
+                }
+                // OTHERWISE
+                else
+                {
+                    // CELL IS DEAD
+                    temp_grid.SetValue(row, column, 0);
+                }
+            }
+        }
+    }
+
+    // Copy temp_grid to normal grid, once done
+    grid = temp_grid;
+}
+
+void Simulation::HighLifeAlgorithm()
+{
+    std::cout << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
+}
 

@@ -11,6 +11,8 @@
 
 // TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
 // TODO: work on brush size implementation
+// TODO: implement subtractive random number generator
+// TODO: implement different types of cellular automata
 
 
 int main()
@@ -56,6 +58,7 @@ int main()
 
     SetTargetFPS(fps);
     Simulation simulation(windowWidth, windowHeight, cellSize);
+    simulation.SetSimulationType(SimulationType::HIGH_LIFE);
 
     std::string controls =
         "A: decrease fps cap\n"
@@ -117,6 +120,7 @@ int main()
             }
         }
 
+        // check for hotkey input
         if (IsKeyPressed(KEY_ENTER))
         {
             guiFocus1 = false;

@@ -6,6 +6,13 @@
 #include "grid.hpp"
 #include "raylib.h"
 
+
+enum class SimulationType
+{
+    GAME_OF_LIFE,
+    HIGH_LIFE,
+};
+
 class Simulation {
     public:
         Simulation(int width, int height, int cellSize)
@@ -21,9 +28,14 @@ class Simulation {
         void ClearGrid();
         void CreateRandomState(int density, bool additiveFill);
         void ToggleCell(int row, int column, int brushSize);
+        void SetSimulationType(SimulationType simulationType);
+
     private:
         Grid grid;
         Grid temp_grid;
         bool run;
+        SimulationType simulationType;
+        void GameOfLifeAlgorithm();
+        void HighLifeAlgorithm();
 };
 
