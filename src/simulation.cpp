@@ -178,6 +178,6 @@ void Simulation::HighLifeAlgorithm()
     // if alive and > 3 neigbors, cell is dead
     // otherwise, cell is alive
     // id dead and == 3 neighbor, cell is alive
-    std::cout << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
+    std::cerr << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
 }
 

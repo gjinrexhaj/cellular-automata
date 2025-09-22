@@ -20,7 +20,7 @@ int main()
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
     auto gridlineColor = Color(20, 20, 20 , 255);
-    auto aliveColor = Color(255, 255, 255, 255);
+    auto aliveColor = Color(185, 185, 185, 225);
     auto deadColor = Color(40, 40, 40, 255);
     auto fontColor = Color(255, 255, 255, 255);
 
@@ -53,12 +53,12 @@ int main()
     bool autoResizeEnvironment = false;
     bool additiveFill = false;
 
-    InitWindow(windowWidth, windowHeight, "GoL Canvas - IDLE");
+    InitWindow(windowWidth, windowHeight, "Automata Engine: IDLE");
     GuiLoadStyle("../styles/custom-dark.rgs");
 
     SetTargetFPS(fps);
     Simulation simulation(windowWidth, windowHeight, cellSize);
-    simulation.SetSimulationType(SimulationType::HIGH_LIFE);
+    simulation.SetSimulationType(SimulationType::GAME_OF_LIFE);
 
     std::string controls =
         "A: decrease fps cap\n"
@@ -132,12 +132,12 @@ int main()
 
             if (running)
             {
-                SetWindowTitle("GoL Canvas - RUNNING");
+                SetWindowTitle("Automata Engine: RUNNING");
                 simulation.Start();
             }
             else
             {
-                SetWindowTitle("GoL Canvas - IDLE");
+                SetWindowTitle("Automata Engine: IDLE");
                 simulation.Stop();
             }
         }
@@ -262,7 +262,7 @@ int main()
                 std::cout << "value1: " << windowWidth << std::endl;
                 std::cout << "value2: " << windowHeight << std::endl;
                 std::cout << "value3: " << cellSize << std::endl;
-                SetWindowTitle("GoL Canvas - IDLE");
+                SetWindowTitle("Automata Engine: IDLE");
 
                 SetWindowSize(windowWidth, windowHeight);
 
