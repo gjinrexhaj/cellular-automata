@@ -308,7 +308,7 @@ int main()
             GuiLabel({dialogRect.x + 10, dialogRect.y + 205, 240, 20 }, "your current environment!");
 
             // simulation mode dropdown
-            if ((selectedDropdownItem = GuiDropdownBox({dialogRect.x + 20, dialogRect.y + 130, 185, 20}, "Game of life;High Life", &chosenSimulationType, guiFocus7)))
+            if ((selectedDropdownItem = GuiDropdownBox({dialogRect.x + 20, dialogRect.y + 130, 185, 20}, "Game of life;Torpedo;High Life", &chosenSimulationType, guiFocus7)))
             {
                 std::cout<<"dropdown7 req focus"<<std::endl;
                 guiFocus1 = false;
@@ -323,12 +323,18 @@ int main()
                 switch (chosenSimulationType)
                 {
                     case 0:
+                        std::cout<<"GAME_OF_LIFE RULESET SELECTED" << std::endl;
                         selectedSimulationType = SimulationType::GAME_OF_LIFE;
                         break;
                     case 1:
+                        std::cout<<"TORPEDO RULESET SELECTED" << std::endl;
+                        selectedSimulationType = SimulationType::TORPEDO;
+                        break;
+                    case 2:
+                        std::cout<<"HIGH_LIFE RULESET SELECTED" << std::endl;
                         selectedSimulationType = SimulationType::HIGH_LIFE;
                         break;
-                default:
+                    default:
                         std::cerr<<"Warning: Unknown simulation type selected!"<<std::endl;
                 }
             }

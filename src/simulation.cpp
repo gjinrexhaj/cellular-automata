@@ -64,6 +64,9 @@ void Simulation::Update()
         case SimulationType::GAME_OF_LIFE:
             GameOfLifeAlgorithm();
             break;
+        case SimulationType::TORPEDO:
+            TorpedoAlgorithm();
+            break;
         case SimulationType::HIGH_LIFE:
             HighLifeAlgorithm();
             break;
@@ -170,15 +173,8 @@ void Simulation::GameOfLifeAlgorithm()
     grid = temp_grid;
 }
 
-void Simulation::HighLifeAlgorithm()
+void Simulation::TorpedoAlgorithm()
 {
-    // TODO: implement HighLifeAlgorithm()
-
-    // High Life rules
-    // if alive and < 2 neighbors, cell is dead
-    // if alive and > 3 neigbors, cell is dead
-    // otherwise, cell is alive
-    // if dead and == 3 or == 6 neighbor, cell is alive
     for (int row = 0; row < grid.GetRows(); row++)
     {
         for (int column = 0; column < grid.GetColumns(); column++)
@@ -216,8 +212,9 @@ void Simulation::HighLifeAlgorithm()
         // copy temp grid to normal grid once done
         grid = temp_grid;
     }
+}
 
-
-
-    //std::cerr << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
+void Simulation::HighLifeAlgorithm()
+{
+    std::cerr<<"Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED"<<std::endl;
 }

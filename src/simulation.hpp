@@ -10,6 +10,7 @@
 enum class SimulationType
 {
     GAME_OF_LIFE,
+    TORPEDO,
     HIGH_LIFE,
 };
 
@@ -36,6 +37,7 @@ class Simulation {
         bool run;
         SimulationType simulationType;
         void GameOfLifeAlgorithm();
+        void TorpedoAlgorithm();
         void HighLifeAlgorithm();
 };
 
