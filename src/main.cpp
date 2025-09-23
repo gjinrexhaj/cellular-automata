@@ -13,6 +13,7 @@
 // TODO: work on brush size implementation
 // TODO: implement subtractive random number generator
 // TODO: implement different types of cellular automata
+// TODO : implement frame advancement undo feature
 
 
 int main()
@@ -28,10 +29,12 @@ int main()
     int windowHeight = 650;
     int cellSize = 10;
     int fps = 30;
+    int chosenSimulationType = 0;
 
     float lineThickness = 1;
     int brushSize = 1;
     int rngDensity = 6;
+    int advanceFactor = 1;
 
     bool running = false;
     bool showText = true;
@@ -40,12 +43,15 @@ int main()
     bool showCreateNewEnvironmentPanel = false;
     bool showColorPickerPanel = false;
     bool showSettingsPanel = false;
+    bool showFrameAdvancePanel = false;
 
     bool guiFocus1 = false;
     bool guiFocus2 = false;
     bool guiFocus3 = false;
     bool guiFocus4 = false;
     bool guiFocus5 = false;
+    bool guiFocus6 = false;
+    bool guiFocus7 = false;
 
     bool allowEditingWhileRunning = false;
     bool allowKeybindsDuringSimulation = false;
@@ -53,24 +59,29 @@ int main()
     bool autoResizeEnvironment = false;
     bool additiveFill = false;
 
+    bool enableFrameAdvance = false;
+    int selectedDropdownItem = 0;
+
+    auto selectedSimulationType = SimulationType::GAME_OF_LIFE;
+
     InitWindow(windowWidth, windowHeight, "Automata Engine: IDLE");
     GuiLoadStyle("../styles/custom-dark.rgs");
 
     SetTargetFPS(fps);
-    Simulation simulation(windowWidth, windowHeight, cellSize);
-    simulation.SetSimulationType(SimulationType::GAME_OF_LIFE);
+    Simulation simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
 
     std::string controls =
+        "L: frame advancement menu\n"
         "A: decrease fps cap\n"
         "D: increase fps cap\n"
-        "C: clear grid (sim must be stopped)\n"
+        "C: clear grid\n"
         "P: toggle color picker\n"
-        "R: randomize grid (sim must be stopped)\n"
+        "R: randomize grid\n"
         "F: toggle fps counter\n"
         "N: change simulation environment\n"
         "D: change settings\n"
-        "LMOUSE: draw cells (sim must be stopped)\n"
-        "RMOUSE: erase cells (sim must be stopped)\n"
+        "LMOUSE: draw cells\n"
+        "RMOUSE: erase cells\n"
         "ENTER: toggle simulation\n"
         "ESC: quit program\n"
         "Q: show/hide this text";
@@ -85,7 +96,7 @@ int main()
             windowHeight = GetScreenHeight();
             if (autoResizeEnvironment)
             {
-                simulation = Simulation(windowWidth, windowHeight, cellSize);
+                simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
             }
         }
 
@@ -189,6 +200,37 @@ int main()
             std::cout << "Show settings panel" << std::endl;
             showSettingsPanel = !showSettingsPanel;
         }
+        else if (IsKeyPressed(KEY_L))
+        {
+            std::cout << "Show frame advance panel" << std::endl;
+            showFrameAdvancePanel = !showFrameAdvancePanel;
+        }
+        else if (enableFrameAdvance && IsKeyPressed(KEY_RIGHT))
+        {
+            bool simWasRunning = simulation.IsRunning();
+            std::cout << "Frame advance for: " << advanceFactor << " frames" << std::endl;
+
+            if (!simWasRunning)
+            {
+                simulation.Start();
+            }
+
+            for (int i = 0; i < advanceFactor; i++)
+            {
+                simulation.Update();
+                ClearBackground(gridlineColor);
+                simulation.Draw(aliveColor, deadColor, lineThickness);
+            }
+
+            if (!simWasRunning)
+            {
+                simulation.Stop();
+            }
+        }
+        else if (enableFrameAdvance && IsKeyPressed(KEY_LEFT))
+        {
+            std::cout << "Frame regress" << std::endl;
+        }
 
         // Update State
         simulation.Update();
@@ -199,7 +241,7 @@ int main()
         simulation.Draw(aliveColor, deadColor, lineThickness);
         if (showText)
         {
-            DrawText(controls.c_str(), 10, GetScreenHeight() - 290, 20, fontColor);
+            DrawText(controls.c_str(), 10, GetScreenHeight() - 310, 20, fontColor);
         }
         if (showFps)
         {
@@ -217,9 +259,9 @@ int main()
         // NEW WINDOW DIALOG MENU
         if (showCreateNewEnvironmentPanel)
         {
-            Rectangle dialogRect = { 0, 0, 225, 250 };
+            Rectangle dialogRect = { 0, 0, 225, 280 };
 
-            if (GuiWindowBox(dialogRect, "Create New Environment"))
+            if (GuiWindowBox(dialogRect, "Create New Environment [N]"))
             {
                 showCreateNewEnvironmentPanel = false; // Close the dialog if the close button is pressed
             }
@@ -232,6 +274,8 @@ int main()
                 guiFocus3 = false;
                 guiFocus4 = false;
                 guiFocus5 = false;
+                guiFocus6 = false;
+                guiFocus7 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &windowHeight, 1, 2000, guiFocus2))
@@ -242,6 +286,8 @@ int main()
                 guiFocus3 = false;
                 guiFocus4 = false;
                 guiFocus5 = false;
+                guiFocus6 = false;
+                guiFocus7 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &cellSize, 1, 50, guiFocus3))
@@ -252,23 +298,60 @@ int main()
                 guiFocus3 = true;
                 guiFocus4 = false;
                 guiFocus5 = false;
+                guiFocus6 = false;
+                guiFocus7 = false;
             }
 
-            GuiLabel({dialogRect.x + 10, dialogRect.y + 160, 240, 20 }, "Warning! This action will delete");
-            GuiLabel({dialogRect.x + 10, dialogRect.y + 175, 240, 20 }, "your current environment!");
+            GuiLabel({dialogRect.x + 10, dialogRect.y + 190, 240, 20 }, "Warning! This action will delete");
+            GuiLabel({dialogRect.x + 10, dialogRect.y + 205, 240, 20 }, "your current environment!");
 
-            if (GuiButton({ dialogRect.x + 50, dialogRect.y + 200, 100, 30 }, "CREATE"))
+            // simulation mode dropdown
+            if ((selectedDropdownItem = GuiDropdownBox({dialogRect.x + 20, dialogRect.y + 130, 185, 20}, "Game of life;High Life", &chosenSimulationType, guiFocus7)))
+            {
+                std::cout<<"dropdown7 req focus"<<std::endl;
+                guiFocus1 = false;
+                guiFocus2 = false;
+                guiFocus3 = false;
+                guiFocus4 = false;
+                guiFocus5 = false;
+                guiFocus6 = false;
+                guiFocus7 = true;
+
+                // update selectedSimulationType enum
+                switch (chosenSimulationType)
+                {
+                    case 0:
+                        selectedSimulationType = SimulationType::GAME_OF_LIFE;
+                        break;
+                    case 1:
+                        selectedSimulationType = SimulationType::HIGH_LIFE;
+                        break;
+                default:
+                        std::cerr<<"Warning: Unknown simulation type selected!"<<std::endl;
+                }
+            }
+
+            if (selectedDropdownItem == 1)
+            {
+                guiFocus1 = false;
+            }
+
+
+            if (GuiButton({ dialogRect.x + 50, dialogRect.y + 230, 100, 30 }, "CREATE"))
             {
                 std::cout << "value1: " << windowWidth << std::endl;
                 std::cout << "value2: " << windowHeight << std::endl;
                 std::cout << "value3: " << cellSize << std::endl;
+                std::cout << "value4: " << chosenSimulationType << std::endl;
                 SetWindowTitle("Automata Engine: IDLE");
 
                 SetWindowSize(windowWidth, windowHeight);
 
-                simulation = Simulation(windowWidth, windowHeight, cellSize);
+                simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
                 running = false;
             }
+
+
         }
 
         // COLOR PICKER DIALOG MENU
@@ -276,7 +359,7 @@ int main()
         {
             Rectangle dialogRect = { (float)GetScreenWidth()-250, 0, 250, 350 };
 
-            if (GuiWindowBox(dialogRect, "Color Picker"))
+            if (GuiWindowBox(dialogRect, "Color Picker [P]"))
             {
                 showColorPickerPanel = false; // Close the dialog if the close button is pressed
             }
@@ -299,7 +382,7 @@ int main()
 
             Rectangle dialogRect = {0, (float)GetScreenHeight()-350, 300, 350 };
 
-            if (GuiWindowBox(dialogRect, "Settings"))
+            if (GuiWindowBox(dialogRect, "Settings [D]"))
             {
                 showSettingsPanel = false; // Close the dialog if the close button is pressed
             }
@@ -330,6 +413,8 @@ int main()
                 guiFocus3 = false;
                 guiFocus4 = true;
                 guiFocus5 = false;
+                guiFocus6 = false;
+                guiFocus7 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 0, 100, guiFocus5))
@@ -339,6 +424,33 @@ int main()
                 guiFocus3 = false;
                 guiFocus4 = false;
                 guiFocus5 = true;
+                guiFocus6 = false;
+                guiFocus7 = false;
+            }
+        }
+
+        if (showFrameAdvancePanel)
+        {
+            Rectangle dialogRect = { (float)GetScreenWidth()-250, (float)GetScreenHeight()-300, 250, 300 };
+
+            if (GuiWindowBox(dialogRect, "Frame Advancement [L]"))
+            {
+                showFrameAdvancePanel = false; // Close the dialog if the close button is pressed
+            }
+
+            GuiLabel({dialogRect.x +10, dialogRect.y +15, 250, 50}, "RIGHT_ARROW: Forwards");
+            GuiLabel({dialogRect.x +10, dialogRect.y +35, 250, 50}, "LEFT_ARROW: Backwards");
+            GuiCheckBox({dialogRect.x +10, dialogRect.y +85, 20, 20}, "Enable Frame Advance", &enableFrameAdvance);
+
+            if (GuiSpinner({dialogRect.x +110, dialogRect.y +115, 90, 20}, "Advance Factor ", &advanceFactor, 1, 400, guiFocus6))
+            {
+                guiFocus1 = false;
+                guiFocus2 = false;
+                guiFocus3 = false;
+                guiFocus4 = false;
+                guiFocus5 = false;
+                guiFocus6 = true;
+                guiFocus7 = false;
             }
         }
 

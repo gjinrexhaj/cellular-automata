@@ -73,6 +73,7 @@ void Simulation::Update()
 void Simulation::ClearGrid()
 {
     grid.Clear();
+    temp_grid.Clear();
 }
 
 void Simulation::CreateRandomState(int density, bool additiveFill)
@@ -177,7 +178,46 @@ void Simulation::HighLifeAlgorithm()
     // if alive and < 2 neighbors, cell is dead
     // if alive and > 3 neigbors, cell is dead
     // otherwise, cell is alive
-    // id dead and == 3 neighbor, cell is alive
-    std::cerr << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
-}
+    // if dead and == 3 or == 6 neighbor, cell is alive
+    for (int row = 0; row < grid.GetRows(); row++)
+    {
+        for (int column = 0; column < grid.GetColumns(); column++)
+        {
+            int liveNeighbors = CountLiveNeighbors(row, column);
+            int cellValue = grid.GetValue(row, column);
 
+            // IF CELL IS ALIVE
+            if (cellValue == 1)
+            {
+                // AND HAS 2 OR 3 NEIGHBORS
+                if (liveNeighbors == 2 || liveNeighbors == 3)
+                {
+                    // CELL IS ALIVE
+                    temp_grid.SetValue(row, column, 1);
+                }
+                // OTHERWISE
+                else
+                {
+                    // CELL IS DEAD
+                    temp_grid.SetValue(row, column, 0);
+                }
+            }
+            // IF CELL IS DEAD
+            else
+            {
+                // AND HAS > 3 AND < 6 NEIGHBORS
+                if (liveNeighbors == 3 || liveNeighbors == 6)
+                {
+                    temp_grid.SetValue(row, column, 1);
+                }
+            }
+        }
+
+        // copy temp grid to normal grid once done
+        grid = temp_grid;
+    }
+
+
+
+    //std::cerr << "Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED!!!" << std::endl;
+}

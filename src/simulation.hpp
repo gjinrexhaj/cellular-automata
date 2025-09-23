@@ -15,8 +15,8 @@ enum class SimulationType
 
 class Simulation {
     public:
-        Simulation(int width, int height, int cellSize)
-            : grid(width, height, cellSize), temp_grid(width, height, cellSize), run(false) {};
+        Simulation(int width, int height, int cellSize, SimulationType simulationType)
+            : grid(width, height, cellSize), temp_grid(width, height, cellSize), simulationType(simulationType), run(false) {};
         void Draw(Color aliveColor, Color deadColor, float lineThickness);
         void SetCellValue(int row, int column, int value);
         int GetCellValue(int row, int column);
