@@ -11,6 +11,7 @@ enum class SimulationType
 {
     GAME_OF_LIFE,
     TORPEDO,
+    DIAMOND_GROWTH,
     HIGH_LIFE,
 };
 
@@ -38,6 +39,7 @@ class Simulation {
         SimulationType simulationType;
         void GameOfLifeAlgorithm();
         void TorpedoAlgorithm();
+        void DiamondGrowthAlgorithm();
         void HighLifeAlgorithm();
 };
 

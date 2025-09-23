@@ -307,8 +307,22 @@ int main()
             GuiLabel({dialogRect.x + 10, dialogRect.y + 190, 240, 20 }, "Warning! This action will delete");
             GuiLabel({dialogRect.x + 10, dialogRect.y + 205, 240, 20 }, "your current environment!");
 
+            if (GuiButton({ dialogRect.x + 50, dialogRect.y + 230, 100, 30 }, "CREATE"))
+            {
+                std::cout << "value1: " << windowWidth << std::endl;
+                std::cout << "value2: " << windowHeight << std::endl;
+                std::cout << "value3: " << cellSize << std::endl;
+                std::cout << "value4: " << chosenSimulationType << std::endl;
+                SetWindowTitle("Automata Engine: IDLE");
+
+                SetWindowSize(windowWidth, windowHeight);
+
+                simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
+                running = false;
+            }
+
             // simulation mode dropdown
-            if ((selectedDropdownItem = GuiDropdownBox({dialogRect.x + 20, dialogRect.y + 130, 185, 20}, "Game of life;Torpedo;High Life", &chosenSimulationType, guiFocus7)))
+            if ((selectedDropdownItem = GuiDropdownBox({dialogRect.x + 20, dialogRect.y + 130, 185, 20}, "Game of life;Torpedo;Diamond Growth;High Life", &chosenSimulationType, guiFocus7)))
             {
                 std::cout<<"dropdown7 req focus"<<std::endl;
                 guiFocus1 = false;
@@ -331,6 +345,10 @@ int main()
                         selectedSimulationType = SimulationType::TORPEDO;
                         break;
                     case 2:
+                        std::cout<<"DIAMOND GROWTH RULESET SELECTED" << std::endl;
+                        selectedSimulationType = SimulationType::DIAMOND_GROWTH;
+                        break;
+                    case 3:
                         std::cout<<"HIGH_LIFE RULESET SELECTED" << std::endl;
                         selectedSimulationType = SimulationType::HIGH_LIFE;
                         break;
@@ -342,21 +360,6 @@ int main()
             if (selectedDropdownItem == 1)
             {
                 guiFocus1 = false;
-            }
-
-
-            if (GuiButton({ dialogRect.x + 50, dialogRect.y + 230, 100, 30 }, "CREATE"))
-            {
-                std::cout << "value1: " << windowWidth << std::endl;
-                std::cout << "value2: " << windowHeight << std::endl;
-                std::cout << "value3: " << cellSize << std::endl;
-                std::cout << "value4: " << chosenSimulationType << std::endl;
-                SetWindowTitle("Automata Engine: IDLE");
-
-                SetWindowSize(windowWidth, windowHeight);
-
-                simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
-                running = false;
             }
 
 
