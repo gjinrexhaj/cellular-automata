@@ -9,11 +9,9 @@
 #include "simulation.hpp"
 
 
-// TODO: decouple keyobard event handler framerate from rendering framerate to prevent unresponsiveness at low fps
 // TODO: work on brush size implementation
-// TODO: implement subtractive random number generator
-// TODO: implement different types of cellular automata
-// TODO : implement frame advancement undo feature
+// TODO: implement fixed ver of "high life"
+// TODO: implement frame advancement undo feature - also need to implement FA buffer
 
 
 int main()
