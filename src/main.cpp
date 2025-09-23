@@ -331,7 +331,7 @@ int main()
                 guiFocus4 = false;
                 guiFocus5 = false;
                 guiFocus6 = false;
-                guiFocus7 = true;
+                guiFocus7 ? guiFocus7 = false : guiFocus7 = true;
 
                 // update selectedSimulationType enum
                 switch (chosenSimulationType)
