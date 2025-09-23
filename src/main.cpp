@@ -69,20 +69,23 @@ int main()
     Simulation simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
 
     std::string controls =
-        "L: frame advancement menu\n"
+        "--- MENU CONTROLS ---\n"
+        "M: frame advance menu\n"
+        "P: color picker menu\n"
+        "Q: create new environment menu\n"
+        "Z: general settings menu\n"
+        "\n\n"
+        "----- HOTKEYS -----\n"
         "A: decrease fps cap\n"
         "D: increase fps cap\n"
         "C: clear grid\n"
-        "P: toggle color picker\n"
         "R: randomize grid\n"
-        "F: toggle fps counter\n"
-        "N: change simulation environment\n"
-        "D: change settings\n"
-        "LMOUSE: draw cells\n"
-        "RMOUSE: erase cells\n"
-        "ENTER: toggle simulation\n"
-        "ESC: quit program\n"
-        "Q: show/hide this text";
+        "LMOUSE: add cell\n"
+        "LMOUSE: remove cell\n"
+        "ENTER: idle/run engine\n"
+        "\n"
+        "H: hide this text\n"
+        "F: hide fps counter\n";
 
     // Simulation Loop
     while (!WindowShouldClose())
@@ -175,7 +178,7 @@ int main()
                 simulation.ClearGrid();
             }
         }
-        else if (IsKeyPressed(KEY_Q))
+        else if (IsKeyPressed(KEY_H))
         {
             showText = !showText;
         }
@@ -183,7 +186,7 @@ int main()
         {
             showFps = !showFps;
         }
-        else if (IsKeyPressed(KEY_N))
+        else if (IsKeyPressed(KEY_Q))
         {
             std::cout << "Show new environment panel" << std::endl;
             showCreateNewEnvironmentPanel = !showCreateNewEnvironmentPanel;
@@ -193,12 +196,12 @@ int main()
             std::cout << "Show color picker panel" << std::endl;
             showColorPickerPanel = !showColorPickerPanel;
         }
-        else if (IsKeyPressed(KEY_D))
+        else if (IsKeyPressed(KEY_Z))
         {
             std::cout << "Show settings panel" << std::endl;
             showSettingsPanel = !showSettingsPanel;
         }
-        else if (IsKeyPressed(KEY_L))
+        else if (IsKeyPressed(KEY_M))
         {
             std::cout << "Show frame advance panel" << std::endl;
             showFrameAdvancePanel = !showFrameAdvancePanel;
@@ -239,7 +242,8 @@ int main()
         simulation.Draw(aliveColor, deadColor, lineThickness);
         if (showText)
         {
-            DrawText(controls.c_str(), 10, GetScreenHeight() - 310, 20, fontColor);
+            int textSize = MeasureText(controls.c_str(), 20);
+            DrawText(controls.c_str(), (GetScreenWidth() - textSize)/2, (GetScreenHeight() - textSize)/2, 20, fontColor);
         }
         if (showFps)
         {
@@ -259,7 +263,7 @@ int main()
         {
             Rectangle dialogRect = { 0, 0, 225, 280 };
 
-            if (GuiWindowBox(dialogRect, "Create New Environment [N]"))
+            if (GuiWindowBox(dialogRect, "Create New Environment [Q]"))
             {
                 showCreateNewEnvironmentPanel = false; // Close the dialog if the close button is pressed
             }
@@ -380,7 +384,7 @@ int main()
 
             Rectangle dialogRect = {0, (float)GetScreenHeight()-350, 300, 350 };
 
-            if (GuiWindowBox(dialogRect, "Settings [D]"))
+            if (GuiWindowBox(dialogRect, "General Settings [Z]"))
             {
                 showSettingsPanel = false; // Close the dialog if the close button is pressed
             }
@@ -431,7 +435,7 @@ int main()
         {
             Rectangle dialogRect = { (float)GetScreenWidth()-250, (float)GetScreenHeight()-300, 250, 300 };
 
-            if (GuiWindowBox(dialogRect, "Frame Advancement [L]"))
+            if (GuiWindowBox(dialogRect, "Frame Advancement [M]"))
             {
                 showFrameAdvancePanel = false; // Close the dialog if the close button is pressed
             }
