@@ -10,8 +10,8 @@
 
 
 // TODO: work on brush size implementation
-// TODO: implement fixed ver of "high life"
 // TODO: implement frame advancement undo feature - also need to implement FA buffer
+// TODO: optimizations + other performance improvements
 
 
 int main()

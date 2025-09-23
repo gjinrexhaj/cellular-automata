@@ -128,6 +128,7 @@ void Simulation::SetSimulationType(SimulationType type)
 void Simulation::GameOfLifeAlgorithm()
 {
     // Game of life rules
+    // B3, S26
     for (int row = 0; row < grid.GetRows(); row++)
     {
 
@@ -221,11 +222,6 @@ void Simulation::DiamondGrowthAlgorithm()
 {
     for (int row = 0; row < grid.GetRows(); row++)
     {
-
-        // rules
-        // Birth Rule (B36): A dead cell comes to life if it has exactly 3 or 6 live neighbors.
-        // Survival Rule (S23): A live cell remains alive if it has exactly 2 or 3 live neighbors.
-
         for (int column = 0; column < grid.GetColumns(); column++)
         {
             // GET NUM NEIGHBORS AND CURRENT CELL STATE
@@ -284,5 +280,52 @@ void Simulation::DiamondGrowthAlgorithm()
 
 void Simulation::HighLifeAlgorithm()
 {
-    std::cerr<<"Simulation::HighLifeAlgorithm() - NOT YET IMPLEMENTED"<<std::endl;
+    // Game of life rules, but with
+    // B36 , S23
+    for (int row = 0; row < grid.GetRows(); row++)
+    {
+
+        for (int column = 0; column < grid.GetColumns(); column++)
+        {
+            // GET NUM NEIGHBORS AND CURRENT CELL STATE
+            int liveNeighbors = CountLiveNeighbors(row, column);
+            int cellValue = grid.GetValue(row, column);
+
+            // IF CELL IS ALIVE
+            if (cellValue == 1)
+            {
+                // AND HAS < 3 OR > 2 NEIGHBORS
+                if (liveNeighbors >3 || liveNeighbors < 2)
+                {
+                    // CELL IS DEAD
+                    temp_grid.SetValue(row, column, 0);
+                }
+                // OTHERWISE
+                else
+                {
+                    // CELL IS ALIVE
+                    temp_grid.SetValue(row, column, 1);
+                }
+            }
+            // IF CELL IS DEAD
+            else
+            {
+                // AND HAS 3 NEIGHBORS
+                if (liveNeighbors == 3 || liveNeighbors == 6)
+                {
+                    // CELL IS ALIVE
+                    temp_grid.SetValue(row, column, 1);
+                }
+                // OTHERWISE
+                else
+                {
+                    // CELL IS DEAD
+                    temp_grid.SetValue(row, column, 0);
+                }
+            }
+        }
+    }
+
+    // Copy temp_grid to normal grid, once done
+    grid = temp_grid;
 }
