@@ -11,7 +11,8 @@
 
 // TODO: work on brush size implementation
 // TODO: implement frame advancement undo feature - also need to implement FA buffer
-// TODO: optimizations + other performance improvements
+// TODO: optimizations + other performance improvements (maybe use multi-threading)
+// TODO: remove guiFocus boolean spaghetti code
 
 
 int main()
@@ -50,6 +51,7 @@ int main()
     bool guiFocus5 = false;
     bool guiFocus6 = false;
     bool guiFocus7 = false;
+    bool guiFocus8 = false;
 
     bool allowEditingWhileRunning = false;
     bool allowKeybindsDuringSimulation = false;
@@ -278,6 +280,7 @@ int main()
                 guiFocus5 = false;
                 guiFocus6 = false;
                 guiFocus7 = false;
+                guiFocus8 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &windowHeight, 1, 2000, guiFocus2))
@@ -290,6 +293,7 @@ int main()
                 guiFocus5 = false;
                 guiFocus6 = false;
                 guiFocus7 = false;
+                guiFocus8 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &cellSize, 1, 50, guiFocus3))
@@ -302,6 +306,7 @@ int main()
                 guiFocus5 = false;
                 guiFocus6 = false;
                 guiFocus7 = false;
+                guiFocus8 = false;
             }
 
             GuiLabel({dialogRect.x + 10, dialogRect.y + 190, 240, 20 }, "Warning! This action will delete");
@@ -333,6 +338,7 @@ int main()
                 guiFocus5 = false;
                 guiFocus6 = false;
                 guiFocus7 ? guiFocus7 = false : guiFocus7 = true;
+                guiFocus8 = false;
 
                 // update selectedSimulationType enum
                 switch (chosenSimulationType)
@@ -427,6 +433,7 @@ int main()
                 guiFocus5 = false;
                 guiFocus6 = false;
                 guiFocus7 = false;
+                guiFocus8 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 0, 200, guiFocus5))
@@ -438,6 +445,7 @@ int main()
                 guiFocus5 = true;
                 guiFocus6 = false;
                 guiFocus7 = false;
+                guiFocus8 = false;
             }
         }
 
@@ -463,6 +471,20 @@ int main()
                 guiFocus5 = false;
                 guiFocus6 = true;
                 guiFocus7 = false;
+                guiFocus8 = false;
+            }
+
+            if (GuiSpinner({dialogRect.x +110, dialogRect.y +145, 90, 20}, "Current FPS Cap ", &fps, 5, 600, guiFocus8))
+            {
+                guiFocus1 = false;
+                guiFocus2 = false;
+                guiFocus3 = false;
+                guiFocus4 = false;
+                guiFocus5 = false;
+                guiFocus6 = false;
+                guiFocus7 = false;
+                guiFocus8 = true;
+                SetTargetFPS(fps);
             }
         }
 

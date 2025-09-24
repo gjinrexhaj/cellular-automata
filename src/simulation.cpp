@@ -85,6 +85,7 @@ void Simulation::ClearGrid()
 void Simulation::CreateRandomState(int density, bool additiveFill)
 {
     grid.FillRandom(density, additiveFill);
+    temp_grid = grid;
 }
 
 void Simulation::ToggleCell(int row, int column, int brushSize)
@@ -114,6 +115,7 @@ void Simulation::ToggleCell(int row, int column, int brushSize)
         grid.ToggleCell(row+i, column-i);
     }
 
+    temp_grid = grid;
 }
 
 void Simulation::SetSimulationType(SimulationType type)
