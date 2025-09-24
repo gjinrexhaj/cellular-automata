@@ -179,6 +179,8 @@ void Simulation::GameOfLifeAlgorithm()
 
 void Simulation::TorpedoAlgorithm()
 {
+    // Torpedo, same as high life but grid swap occurs within outer loop
+    // Less performant, but leads to cool results!
     for (int row = 0; row < grid.GetRows(); row++)
     {
         for (int column = 0; column < grid.GetColumns(); column++)
@@ -212,7 +214,6 @@ void Simulation::TorpedoAlgorithm()
                 }
             }
         }
-
         // copy temp grid to normal grid once done
         grid = temp_grid;
     }
