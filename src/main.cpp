@@ -474,6 +474,8 @@ int main()
                 guiFocus8 = false;
             }
 
+            int prevFPS = fps;
+
             if (GuiSpinner({dialogRect.x +110, dialogRect.y +145, 90, 20}, "Current FPS Cap ", &fps, 5, 600, guiFocus8))
             {
                 guiFocus1 = false;
@@ -484,6 +486,11 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = true;
+            }
+
+            if (prevFPS != fps)
+            {
+                std::cout << "FPS changed from FA menu" << std::endl;
                 SetTargetFPS(fps);
             }
         }
