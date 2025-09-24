@@ -188,22 +188,22 @@ int main()
         }
         else if (IsKeyPressed(KEY_Q))
         {
-            std::cout << "Show new environment panel" << std::endl;
+            std::cout << "Showing new environment panel" << std::endl;
             showCreateNewEnvironmentPanel = !showCreateNewEnvironmentPanel;
         }
         else if (IsKeyPressed(KEY_P))
         {
-            std::cout << "Show color picker panel" << std::endl;
+            std::cout << "Showing color picker panel" << std::endl;
             showColorPickerPanel = !showColorPickerPanel;
         }
         else if (IsKeyPressed(KEY_Z))
         {
-            std::cout << "Show settings panel" << std::endl;
+            std::cout << "Showing general settings panel" << std::endl;
             showSettingsPanel = !showSettingsPanel;
         }
         else if (IsKeyPressed(KEY_M))
         {
-            std::cout << "Show frame advance panel" << std::endl;
+            std::cout << "Showing frame advance panel" << std::endl;
             showFrameAdvancePanel = !showFrameAdvancePanel;
         }
         else if (enableFrameAdvance && IsKeyPressed(KEY_RIGHT))
@@ -230,7 +230,7 @@ int main()
         }
         else if (enableFrameAdvance && IsKeyPressed(KEY_LEFT))
         {
-            std::cout << "Frame regress" << std::endl;
+            std::cerr << "Frame regress not yet implemented" << std::endl;
         }
 
         // Update State
@@ -270,7 +270,7 @@ int main()
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 40, 90, 20}, "Boundary Width ", &windowWidth, 1, 2000, guiFocus1))
             {
-                std::cout<<"spinner1 req focus"<<std::endl;
+                std::cout<<"Boundary width spinner req focus"<<std::endl;
                 guiFocus1 = true;
                 guiFocus2 = false;
                 guiFocus3 = false;
@@ -282,7 +282,7 @@ int main()
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &windowHeight, 1, 2000, guiFocus2))
             {
-                std::cout<<"spinner2 req focus"<<std::endl;
+                std::cout<<"Boundary height req focus"<<std::endl;
                 guiFocus1 = false;
                 guiFocus2 = true;
                 guiFocus3 = false;
@@ -294,7 +294,7 @@ int main()
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &cellSize, 1, 50, guiFocus3))
             {
-                std::cout<<"spinner3 req focus"<<std::endl;
+                std::cout<<"Cell size spinner req focus"<<std::endl;
                 guiFocus1 = false;
                 guiFocus2 = false;
                 guiFocus3 = true;
@@ -309,10 +309,11 @@ int main()
 
             if (GuiButton({ dialogRect.x + 50, dialogRect.y + 230, 100, 30 }, "CREATE"))
             {
-                std::cout << "value1: " << windowWidth << std::endl;
-                std::cout << "value2: " << windowHeight << std::endl;
-                std::cout << "value3: " << cellSize << std::endl;
-                std::cout << "value4: " << chosenSimulationType << std::endl;
+                std::cout<<"CREATE button pressed"<<std::endl;
+                std::cout << "windowWidth: " << windowWidth << std::endl;
+                std::cout << "windowHeight: " << windowHeight << std::endl;
+                std::cout << "cellSize: " << cellSize << std::endl;
+                std::cout << "chosenSimulationType: " << chosenSimulationType << std::endl;
                 SetWindowTitle("Automata Engine: IDLE");
 
                 SetWindowSize(windowWidth, windowHeight);
@@ -324,7 +325,7 @@ int main()
             // simulation mode dropdown
             if ((selectedDropdownItem = GuiDropdownBox({dialogRect.x + 20, dialogRect.y + 130, 185, 20}, "Game of life;Torpedo;Diamond Growth;High Life", &chosenSimulationType, guiFocus7)))
             {
-                std::cout<<"dropdown7 req focus"<<std::endl;
+                std::cout<<"Simulation type dropdown req focus"<<std::endl;
                 guiFocus1 = false;
                 guiFocus2 = false;
                 guiFocus3 = false;
