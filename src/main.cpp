@@ -429,7 +429,7 @@ int main()
                 guiFocus7 = false;
             }
 
-            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 0, 100, guiFocus5))
+            if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 0, 200, guiFocus5))
             {
                 guiFocus1 = false;
                 guiFocus2 = false;
