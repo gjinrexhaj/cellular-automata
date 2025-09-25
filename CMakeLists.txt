@@ -22,10 +22,14 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 endif ()
 
 
-add_executable(cellular-automata src/main.cpp src/grid.cpp src/simulation.cpp)
+# Group all sources and headers
+file(GLOB_RECURSE SOURCES src/*.cpp)
+file(GLOB_RECURSE HEADERS src/*.h src/*.hpp)
+
+add_executable(cellular-automata ${SOURCES} ${HEADERS})
 
 
-# Explicity link win multimedia if building for win32
+# Explicitly link win multimedia if building for win32
 if (WIN32)
     target_link_libraries(cellular-automata raylib Winmm)
 else ()
