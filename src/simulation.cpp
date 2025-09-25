@@ -64,7 +64,7 @@ void Simulation::Update()
         case SimulationType::GAME_OF_LIFE:
             GameOfLifeAlgorithm();
             break;
-        case SimulationType::TORPEDO:
+    case SimulationType::TORPEDO:
             TorpedoAlgorithm();
             break;
         case SimulationType::DIAMOND_GROWTH:
@@ -216,7 +216,7 @@ void Simulation::TorpedoAlgorithm()
                 }
             }
         }
-        // copy temp grid to normal grid once done
+        // copy temp grid to normal grid once done, do so inside the outer loop to introduce asymmetrical chaos
         grid = temp_grid;
     }
 }
@@ -328,7 +328,6 @@ void Simulation::HighLifeAlgorithm()
             }
         }
     }
-
     // Copy temp_grid to normal grid, once done
     grid = temp_grid;
 }
