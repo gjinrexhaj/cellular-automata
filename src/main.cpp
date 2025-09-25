@@ -211,7 +211,7 @@ int main()
         else if (enableFrameAdvance && IsKeyPressed(KEY_RIGHT))
         {
             bool simWasRunning = simulation.IsRunning();
-            std::cout << "Frame advance for: " << advanceFactor << " frames" << std::endl;
+            std::cout << "Frame ADVANCE for: " << advanceFactor << " frames" << std::endl;
 
             if (!simWasRunning)
             {
@@ -232,7 +232,11 @@ int main()
         }
         else if (enableFrameAdvance && IsKeyPressed(KEY_LEFT))
         {
-            std::cerr << "Frame regress not yet implemented" << std::endl;
+
+            bool simWasRunning = simulation.IsRunning();
+            std::cout << "Frame REGRESS for: " << advanceFactor << " frames " << std::endl;
+            std::cerr << "NOT YET IMPLEMENTED!!!";
+
         }
 
         // Update State
