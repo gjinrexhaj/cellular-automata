@@ -86,3 +86,12 @@ void Grid::ToggleCell(int row, int column)
     }
 }
 
+std::vector<std::vector<int>> Grid::getCellState()
+{
+    return cells;
+}
+
+void Grid::setCellState(const std::vector<std::vector<int>>& cellState)
+{
+    cells = cellState;
+}

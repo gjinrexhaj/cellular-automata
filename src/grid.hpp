@@ -18,6 +18,8 @@ class Grid {
         void FillRandom(int density, bool additiveFill);
         void Clear();
         void ToggleCell(int row, int column);
+        std::vector<std::vector<int>> getCellState();
+        void setCellState(const std::vector<std::vector<int>>& cellState);
 
     private:
         int rows = 0;
