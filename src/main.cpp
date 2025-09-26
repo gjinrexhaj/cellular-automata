@@ -54,6 +54,7 @@ int main()
     bool guiFocus6 = false;
     bool guiFocus7 = false;
     bool guiFocus8 = false;
+    bool guiFocus9 = false;
 
     bool allowEditingWhileRunning = false;
     bool allowKeybindsDuringSimulation = false;
@@ -62,6 +63,9 @@ int main()
     bool additiveFill = false;
 
     bool enableFrameAdvance = false;
+    bool useBufferLimit = true;
+    int bufferMaxSize;
+
     int selectedDropdownItem = 0;
 
     auto selectedSimulationType = SimulationType::GAME_OF_LIFE;
@@ -73,6 +77,7 @@ int main()
     Simulation simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
     CellstateBuffer cellstateBuffer;
     cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
+    bufferMaxSize = cellstateBuffer.getMaxSize();
 
     std::string controls =
         "--- MENU CONTROLS ---\n"
@@ -315,6 +320,7 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = false;
+                guiFocus9 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 70, 90, 20}, "Boundary Height ", &windowHeight, 1, 2000, guiFocus2))
@@ -328,6 +334,7 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = false;
+                guiFocus9 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 120, dialogRect.y + 100, 90, 20}, "Cell Size ", &cellSize, 1, 50, guiFocus3))
@@ -341,6 +348,7 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = false;
+                guiFocus9 = false;
             }
 
             GuiLabel({dialogRect.x + 10, dialogRect.y + 190, 240, 20 }, "Warning! This action will delete");
@@ -376,6 +384,7 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 ? guiFocus7 = false : guiFocus7 = true;
                 guiFocus8 = false;
+                guiFocus9 = false;
 
                 // update selectedSimulationType enum
                 switch (chosenSimulationType)
@@ -471,6 +480,7 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = false;
+                guiFocus9 = false;
             }
 
             if (GuiSpinner({dialogRect.x + 143, dialogRect.y + 280, 100, 20}, "RNG sparsity    ", &rngDensity, 0, 200, guiFocus5))
@@ -483,6 +493,7 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = false;
+                guiFocus9 = false;
             }
         }
 
@@ -509,6 +520,7 @@ int main()
                 guiFocus6 = true;
                 guiFocus7 = false;
                 guiFocus8 = false;
+                guiFocus9 = false;
             }
 
             int prevFPS = fps;
@@ -523,14 +535,51 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = true;
+                guiFocus9 = false;
             }
 
-            std::string bufCounterLabel;
+            std::string bufCounterLabel = std::to_string(cellstateBuffer.Size());
             bufCounterLabel = "Buffer Size: " + std::to_string(cellstateBuffer.Size());
+            if (cellstateBuffer.isUseMaxSizeEnabled())
+            {
+                bufCounterLabel += " / " + std::to_string(cellstateBuffer.getMaxSize());
 
+                if (simulation.IsRunning() && (cellstateBuffer.Size() == cellstateBuffer.getMaxSize()))
+                {
+                    bufCounterLabel += " [trimming]";
+                }
+            }
             GuiLabel({dialogRect.x +10, dialogRect.y +175, 300, 20}, bufCounterLabel.c_str());
 
-            if (GuiButton({dialogRect.x +50, dialogRect.y +205, 155, 30}, "CLEAR BUFFER"))
+
+            if (GuiCheckBox({dialogRect.x +10, dialogRect.y +205, 20, 20}, "Limit Buffer Size", &useBufferLimit))
+            {
+                cellstateBuffer.toggleUseMaxSize();
+            }
+
+            if (useBufferLimit)
+            {
+                if (GuiSpinner({dialogRect.x +90, dialogRect.y +230, 90, 20}, "Buffer Size ", &bufferMaxSize, 60, 6000, guiFocus9))
+                {
+                    guiFocus1 = false;
+                    guiFocus2 = false;
+                    guiFocus3 = false;
+                    guiFocus4 = false;
+                    guiFocus5 = false;
+                    guiFocus6 = false;
+                    guiFocus7 = false;
+                    guiFocus8 = false;
+                    guiFocus9 = true;
+                }
+
+                // TODO: MAKE IT SO THIS EXEC ONCE NUMBER CHANGED
+                if (bufferMaxSize >= 60) {
+                    std::cout << "bufferMaxSize: " << bufferMaxSize << " CALLING SETMAXSIZE!!" << std::endl;
+                    cellstateBuffer.setMaxSize(bufferMaxSize);
+                }
+            }
+
+            if (GuiButton({dialogRect.x +50, dialogRect.y +260, 155, 25}, "CLEAR BUFFER"))
             {
                 std::cout << "clear buffer button pressed" << std::endl;
                 cellstateBuffer.Clear();
