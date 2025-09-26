@@ -7,13 +7,22 @@
 #include <iostream>
 #include <ostream>
 
+#include "simulation.hpp"
+
 CellstateBuffer::CellstateBuffer()
 {
     std::cout << "CellstateBuffer created" << std::endl;
+    maximumSize = 600;
+    useMaxSize = true;
 }
 
 void CellstateBuffer::Advance(std::vector<std::vector<int>> cells)
 {
+    if (useMaxSize && buffer.size() == maximumSize)
+    {
+        std::cout << "MAX SIZE REACHED, REMOVING FIRST ELEMENT" << std::endl;
+        buffer.erase(buffer.begin());
+    }
     buffer.push_back(cells);
 }
 
@@ -58,4 +67,64 @@ void CellstateBuffer::Clear()
 unsigned long CellstateBuffer::Size()
 {
     return buffer.size();
+}
+
+void CellstateBuffer::Cutoff() {
+    buffer.erase(buffer.begin());
+    std::cout << "Erasing front of buffer" << std::endl;
+}
+
+int CellstateBuffer::getMaxSize()
+{
+    return maximumSize;
+}
+
+// 600 -> 400
+
+// remove first 200
+
+
+
+// 900 -> 600 = 900 - 600
+
+void CellstateBuffer::setMaxSize(int maxSize)
+{
+    // TODO: clean up code
+    if (!useMaxSize)
+    {
+        std::cout << "setMaxSize() failed: useMaxSize = false" << std::endl;
+        return;
+    }
+
+    int oldSize = buffer.size();
+    int newSize = maxSize;
+    int elementsRemoved = oldSize - newSize;
+
+    maximumSize = newSize;
+
+    if (buffer.size() > maximumSize)
+    {
+        std::cout << "buffer resized to smaller, removing first " << elementsRemoved << " elements" << std::endl;
+        buffer.erase(buffer.begin(), buffer.begin() + elementsRemoved);
+    }
+}
+
+
+// 900 -> 600 = cut off first 300
+
+void CellstateBuffer::toggleUseMaxSize()
+{
+    useMaxSize = !useMaxSize;
+
+    if (buffer.size() > maximumSize)
+    {
+        int removeAmount = buffer.size() - maximumSize;
+        std::cout << "buffer resized to smaller, removing first " << removeAmount << " elements" << std::endl;
+        buffer.erase(buffer.begin(), buffer.begin() + removeAmount);
+    }
+}
+
+bool CellstateBuffer::isUseMaxSizeEnabled()
+{
+    return useMaxSize;
 }

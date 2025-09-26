@@ -14,9 +14,17 @@ class CellstateBuffer
         std::vector<std::vector<int>> Regress();
         void Log();
         void Clear();
+        void Cutoff();
         unsigned long Size();
+
+        int getMaxSize();
+        void setMaxSize(int maxSize);
+        void toggleUseMaxSize();
+        bool isUseMaxSizeEnabled();
 
     private:
         std::vector<std::vector<std::vector<int>>> buffer;
+        int maximumSize;
+        bool useMaxSize;
 };
 
