@@ -4,9 +4,10 @@
 
 ###  Overview
 This is an effort to build an open-source cellular automata engine in C++ with raylib. Currently, this program is able to
-simulate Conway's game of life with the following features:
+simulate a selection of popular and experimental cellular automata algorithms with the following features:
 - Customizable environment and cell sizes
 - Customizable colors
+- Frame advancement and regression
 - Adjustable framerate
 - Cell clearing, randomization, and cell placement using the mouse
 
@@ -18,19 +19,11 @@ GitHub will serve as our primary platform for code.
 
 **USAGE GUIDE**
 
-| Key   | Function           |
-|-------|--------------------|
-| A     | decrease fps limit |
-| C     | clear grid         |
-| P     | color picker       |
-| R     | randomize grid     |
-| F     | fps counter        |
-| N     | change environment |
-| LMB   | place cell         |
-| RMB   | remove cell        |
-| ENTER | toggle simulation  |
-| ESC   | quit program       |
-| Q     | keybind guide      |
+When the program is launched, all keybinds will be displayed in a hidable text which renders onto the screen, specifying
+each individual hotkey and it's purpose. The user can draw cells using the left-mouse-button and erase cells using
+right-mouse-button. Additionally, the user can frame advance/regress using the right and left arrow keys respectively.
+Note: some of these features may be disabled by default (or while sim is active), these constraints can be adjusted in
+each feature's respective control panel.
 
 
 ---
