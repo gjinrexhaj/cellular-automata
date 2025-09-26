@@ -6,11 +6,12 @@
 #include "../external/raygui.h"
 #include <raylib.h>
 #include <iostream>
+
 #include "simulation.hpp"
+#include "cellstate_buffer.h"
 
 
 // TODO: work on brush size implementation
-// TODO: implement frame advancement undo feature - also need to implement FA buffer
 // TODO: optimizations + other performance improvements (maybe use multi-threading)
 // TODO: remove guiFocus boolean spaghetti code
 
@@ -69,6 +70,8 @@ int main()
 
     SetTargetFPS(fps);
     Simulation simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
+    CellstateBuffer cellstateBuffer;
+    cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
 
     std::string controls =
         "--- MENU CONTROLS ---\n"
@@ -220,6 +223,7 @@ int main()
 
             for (int i = 0; i < advanceFactor; i++)
             {
+                cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
                 simulation.Update();
                 ClearBackground(gridlineColor);
                 simulation.Draw(aliveColor, deadColor, lineThickness);
@@ -229,18 +233,43 @@ int main()
             {
                 simulation.Stop();
             }
+
+            //cellstateBuffer.Log();
         }
         else if (enableFrameAdvance && IsKeyPressed(KEY_LEFT))
         {
 
             bool simWasRunning = simulation.IsRunning();
             std::cout << "Frame REGRESS for: " << advanceFactor << " frames " << std::endl;
-            std::cerr << "NOT YET IMPLEMENTED!!!";
 
+            if (!simWasRunning)
+            {
+                simulation.Start();
+            }
+
+            for (int i = 0; i < advanceFactor; i++)
+            {
+                simulation.OverwriteGrid(cellstateBuffer.Regress());
+                ClearBackground(gridlineColor);
+                simulation.Draw(aliveColor, deadColor, lineThickness);
+            }
+
+            if (!simWasRunning)
+            {
+                simulation.Stop();
+            }
+
+            //cellstateBuffer.Log();
         }
 
+        // Advance the buffer if sim is running
+        if (simulation.IsRunning()) {
+            cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
+        }
         // Update State
         simulation.Update();
+
+
 
         // Drawing to Screen
         BeginDrawing();
@@ -328,6 +357,8 @@ int main()
                 SetWindowSize(windowWidth, windowHeight);
 
                 simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
+                cellstateBuffer.Clear();
+
                 running = false;
             }
 
@@ -490,6 +521,18 @@ int main()
                 guiFocus6 = false;
                 guiFocus7 = false;
                 guiFocus8 = true;
+            }
+
+            std::string bufCounterLabel;
+            bufCounterLabel = "Buffer Size: " + std::to_string(cellstateBuffer.Size());
+
+            GuiLabel({dialogRect.x +10, dialogRect.y +175, 300, 20}, bufCounterLabel.c_str());
+
+            if (GuiButton({dialogRect.x +50, dialogRect.y +205, 155, 30}, "CLEAR BUFFER"))
+            {
+                std::cout << "clear buffer button pressed" << std::endl;
+                cellstateBuffer.Clear();
+                cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
             }
 
             if (prevFPS != fps)
