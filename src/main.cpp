@@ -14,6 +14,7 @@
 // TODO: work on brush size implementation
 // TODO: optimizations + other performance improvements (maybe use multi-threading)
 // TODO: remove guiFocus boolean spaghetti code
+// TODO: impl max buffer size in cellstate_buffer
 
 
 int main()
@@ -358,6 +359,7 @@ int main()
 
                 simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
                 cellstateBuffer.Clear();
+                cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
 
                 running = false;
             }
