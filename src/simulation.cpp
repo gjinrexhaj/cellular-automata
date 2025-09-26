@@ -123,6 +123,17 @@ void Simulation::SetSimulationType(SimulationType type)
     simulationType = type;
 }
 
+Grid Simulation::GetCurrentGrid()
+{
+    return grid;
+}
+
+void Simulation::OverwriteGrid(const std::vector<std::vector<int>>& cellState)
+{
+    grid.setCellState(cellState);
+    temp_grid.setCellState(cellState);
+}
+
 
 ////////////////////////////////////
 //  CELLULAR AUTOMATA ALGORITHMS  //

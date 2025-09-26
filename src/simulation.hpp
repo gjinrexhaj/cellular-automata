@@ -31,6 +31,8 @@ class Simulation {
         void CreateRandomState(int density, bool additiveFill);
         void ToggleCell(int row, int column, int brushSize);
         void SetSimulationType(SimulationType simulationType);
+        Grid GetCurrentGrid();
+        void OverwriteGrid(const std::vector<std::vector<int>>&);
 
     private:
         Grid grid;
