@@ -2,7 +2,7 @@
 //                                                                              //
 // StyleAsCode exporter v2.0 - Style data exported as a values array            //
 //                                                                              //
-// USAGE: On init call: GuiLoadStyleDark();                                   //
+// USAGE: On init call: GuiLoadStyleDarkTheme();                                   //
 //                                                                              //
 // more info and bugs-report:  github.com/raysan5/raygui                        //
 // feedback and support:       ray[at]raylibtech.com                            //
@@ -11,10 +11,10 @@
 //                                                                              //
 //////////////////////////////////////////////////////////////////////////////////
 
-#define DARK_STYLE_PROPS_COUNT  18
+#define DARK_THEME_STYLE_PROPS_COUNT  18
 
-// Custom style name: dark
-static const GuiStyleProp darkStyleProps[DARK_STYLE_PROPS_COUNT] = {
+// Custom style name: dark_theme
+static const GuiStyleProp dark_themeStyleProps[DARK_THEME_STYLE_PROPS_COUNT] = {
     { 0, 0, (int)0x878787ff },    // DEFAULT_BORDER_COLOR_NORMAL 
     { 0, 1, (int)0x141414ff },    // DEFAULT_BASE_COLOR_NORMAL 
     { 0, 2, (int)0xffffffff },    // DEFAULT_TEXT_COLOR_NORMAL 
@@ -37,10 +37,10 @@ static const GuiStyleProp darkStyleProps[DARK_STYLE_PROPS_COUNT] = {
 
 // WARNING: This style uses a custom font: "" (size: 16, spacing: 0)
 
-#define DARK_STYLE_FONT_ATLAS_COMP_SIZE 2126
+#define DARK_THEME_STYLE_FONT_ATLAS_COMP_SIZE 2126
 
 // Font atlas image pixels data: DEFLATE compressed
-static unsigned char darkFontData[DARK_STYLE_FONT_ATLAS_COMP_SIZE] = { 0xed,
+static unsigned char dark_themeFontData[DARK_THEME_STYLE_FONT_ATLAS_COMP_SIZE] = { 0xed,
     0xdd, 0xdb, 0x72, 0xa4, 0x3a, 0x12, 0x05, 0x50, 0xfd, 0xff, 0x4f, 0xe7, 0x3c, 0x4c, 0x4c, 0x4c, 0x74, 0x9c, 0xd3, 0x20,
     0xa5, 0x52, 0x17, 0xec, 0xd5, 0xeb, 0xcd, 0xe5, 0x76, 0x51, 0xa0, 0x94, 0x84, 0x28, 0x36, 0xd1, 0x00, 0x00, 0x00, 0x80,
     0x5f, 0x2f, 0xfe, 0xf5, 0x27, 0xf1, 0xd7, 0xdf, 0x8c, 0xee, 0xbf, 0xf3, 0xfc, 0xf3, 0xff, 0xbd, 0x1a, 0x0f, 0xef, 0xd5,
@@ -150,7 +150,7 @@ static unsigned char darkFontData[DARK_STYLE_FONT_ATLAS_COMP_SIZE] = { 0xed,
     0xf0, 0xeb, 0xea, 0xff, 0x3f };
 
 // Font glyphs rectangles data (on atlas)
-static const Rectangle darkFontRecs[189] = {
+static const Rectangle dark_themeFontRecs[189] = {
     { 4, 4, 4 , 16 },
     { 16, 4, 1 , 9 },
     { 25, 4, 3 , 3 },
@@ -344,7 +344,7 @@ static const Rectangle darkFontRecs[189] = {
 
 // Font glyphs info data
 // NOTE: No glyphs.image data provided
-static const GlyphInfo darkFontGlyphs[189] = {
+static const GlyphInfo dark_themeFontGlyphs[189] = {
     { 32, 0, 13, 4, { 0 }},
     { 33, 2, 4, 5, { 0 }},
     { 34, 2, 4, 7, { 0 }},
@@ -536,20 +536,20 @@ static const GlyphInfo darkFontGlyphs[189] = {
     { 255, 1, 4, 7, { 0 }},
 };
 
-// Style loading function: dark
-static void GuiLoadStyleDark(void)
+// Style loading function: dark_theme
+static void GuiLoadStyleDarkTheme(void)
 {
     // Load style properties provided
     // NOTE: Default properties are propagated
-    for (int i = 0; i < DARK_STYLE_PROPS_COUNT; i++)
+    for (int i = 0; i < DARK_THEME_STYLE_PROPS_COUNT; i++)
     {
-        GuiSetStyle(darkStyleProps[i].controlId, darkStyleProps[i].propertyId, darkStyleProps[i].propertyValue);
+        GuiSetStyle(dark_themeStyleProps[i].controlId, dark_themeStyleProps[i].propertyId, dark_themeStyleProps[i].propertyValue);
     }
 
     // Custom font loading
     // NOTE: Compressed font image data (DEFLATE), it requires DecompressData() function
-    int darkFontDataSize = 0;
-    unsigned char *data = DecompressData(darkFontData, DARK_STYLE_FONT_ATLAS_COMP_SIZE, &darkFontDataSize);
+    int dark_themeFontDataSize = 0;
+    unsigned char *data = DecompressData(dark_themeFontData, DARK_THEME_STYLE_FONT_ATLAS_COMP_SIZE, &dark_themeFontDataSize);
     Image imFont = { data, 512, 256, 1, 2 };
 
     Font font = { 0 };
@@ -563,18 +563,18 @@ static void GuiLoadStyleDark(void)
     // Copy char recs data from global fontRecs
     // NOTE: Required to avoid issues if trying to free font
     font.recs = (Rectangle *)RAYGUI_MALLOC(font.glyphCount*sizeof(Rectangle));
-    memcpy(font.recs, darkFontRecs, font.glyphCount*sizeof(Rectangle));
+    memcpy(font.recs, dark_themeFontRecs, font.glyphCount*sizeof(Rectangle));
 
     // Copy font char info data from global fontChars
     // NOTE: Required to avoid issues if trying to free font
     font.glyphs = (GlyphInfo *)RAYGUI_MALLOC(font.glyphCount*sizeof(GlyphInfo));
-    memcpy(font.glyphs, darkFontGlyphs, font.glyphCount*sizeof(GlyphInfo));
+    memcpy(font.glyphs, dark_themeFontGlyphs, font.glyphCount*sizeof(GlyphInfo));
 
     GuiSetFont(font);
 
     // Setup a white rectangle on the font to be used on shapes drawing,
     // it makes possible to draw shapes and text (full UI) in a single draw call
-    Rectangle fontWhiteRec = { 42, 47, 1, 1 };
+    Rectangle fontWhiteRec = { 510, 254, 1, 1 };
     SetShapesTexture(font.texture, fontWhiteRec);
 
     //-----------------------------------------------------------------
