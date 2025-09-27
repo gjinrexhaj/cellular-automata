@@ -25,8 +25,9 @@ endif ()
 # Group all sources and headers
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS src/*.h src/*.hpp)
+file(GLOB_RECURSE STYLES styles/*.h)
 
-add_executable(cellular-automata ${SOURCES} ${HEADERS})
+add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES})
 
 
 # Explicitly link win multimedia if building for win32
@@ -35,4 +36,3 @@ if (WIN32)
 else ()
     target_link_libraries(cellular-automata raylib)
 endif ()
-
