@@ -30,6 +30,13 @@ file(GLOB_RECURSE STYLES styles/*.h)
 add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES})
 
 
+# Build macos app as bundle
+if (APPLE)
+    set(APPLICATION_NAME "cellular-automata")
+    set_target_properties(${APPLICATION_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
+endif()
+
+
 # Explicitly link win multimedia if building for win32
 if (WIN32)
     target_link_libraries(cellular-automata raylib Winmm)
