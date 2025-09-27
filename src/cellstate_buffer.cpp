@@ -96,6 +96,13 @@ void CellstateBuffer::setMaxSize(int maxSize)
         return;
     }
 
+    if (maxSize == maximumSize)
+    {
+        return;
+    }
+
+    std::cout << "executed setMaxSize(" << maxSize << ");" << std::endl;
+
     int oldSize = buffer.size();
     int newSize = maxSize;
     int elementsRemoved = oldSize - newSize;
