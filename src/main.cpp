@@ -9,6 +9,8 @@
 
 #include "simulation.hpp"
 #include "cellstate_buffer.h"
+#include "../styles/dark_theme.h"
+#include "../styles/light_theme.h"
 
 
 // TODO: work on brush size implementation
@@ -71,7 +73,7 @@ int main()
     auto selectedSimulationType = SimulationType::GAME_OF_LIFE;
 
     InitWindow(windowWidth, windowHeight, "Automata Engine: IDLE");
-    GuiLoadStyle("../styles/custom-dark.rgs");
+    GuiLoadStyleDarkTheme();
 
     SetTargetFPS(fps);
     Simulation simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
@@ -457,11 +459,11 @@ int main()
                 if (darkMode)
                 {
                     GuiLoadStyleDefault();
-                    GuiLoadStyle("../styles/custom-dark.rgs");
+                    GuiLoadStyleDarkTheme();
                 } else
                 {
                     GuiLoadStyleDefault();
-                    GuiLoadStyle("../styles/custom-light.rgs");
+                    GuiLoadStyleLightTheme();
                 }
             }
 
@@ -574,9 +576,10 @@ int main()
 
                 // TODO: MAKE IT SO THIS EXEC ONCE NUMBER CHANGED
                 if (bufferMaxSize >= 60) {
-                    std::cout << "bufferMaxSize: " << bufferMaxSize << " CALLING SETMAXSIZE!!" << std::endl;
                     cellstateBuffer.setMaxSize(bufferMaxSize);
                 }
+            } else {
+                GuiLabel({dialogRect.x +10, dialogRect.y +230, 250, 20}, "Limitless buffer is RAM intensive!");
             }
 
             if (GuiButton({dialogRect.x +50, dialogRect.y +260, 155, 25}, "CLEAR BUFFER"))
