@@ -7,7 +7,6 @@ if(APPLE)
     message("Building on OSX!")
     include_directories("./external/raylib-5.5_macos/include")
     link_directories("./external/raylib-5.5_macos/lib")
-    set(MACOSX_BUNDLE_ICON_FILE "./icons/cellular-automata.icon")
 endif ()
 
 if(WIN32)
@@ -36,8 +35,8 @@ add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICONS})
 
 # Build macos app as bundle
 if (APPLE)
-    set(APPLICATION_NAME "cellular-automata")
-    set_target_properties(${APPLICATION_NAME} PROPERTIES MACOSX_BUNDLE TRUE)
+    set_target_properties(cellular-automata PROPERTIES MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_ICON_FILE "./icons/cellular-automata.icon")
 endif()
 
 
