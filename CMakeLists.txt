@@ -26,17 +26,23 @@ endif ()
 file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS src/*.h src/*.hpp)
 file(GLOB_RECURSE STYLES styles/*.h)
-file(GLOB_RECURSE ICONS icons/*)
+
+set(ICON_FILE "AppIcon.icon")
+set(ICON_PATH "./Resources/${ICON_FILE}")
 
 
-add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICONS})
+add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICON_PATH})
 
 
 
 # Build macos app as bundle
 if (APPLE)
-    set_target_properties(cellular-automata PROPERTIES MACOSX_BUNDLE TRUE
-            MACOSX_BUNDLE_ICON_FILE "./icons/cellular-automata.icon")
+    message("Building macOS app bundle")
+    set_target_properties(cellular-automata PROPERTIES
+            MACOSX_BUNDLE TRUE
+            MACOSX_BUNDLE_ICON_FILE ${ICON_FILE}
+    )
+    set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
 endif()
 
 
