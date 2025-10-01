@@ -16,6 +16,7 @@ Video showcase available at [this link](https://www.youtube.com/watch?v=qYmX0MMC
 GitHub will serve as our primary platform for code.
 
 ![til](./readme-docs/ui.gif)
+![diamond-growth-algo](./readme-docs/diamond-growth-algo.png)
 
 **USAGE GUIDE**
 
