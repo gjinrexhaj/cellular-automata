@@ -6,6 +6,7 @@
 #include "../external/raygui.h"
 #include <raylib.h>
 #include <iostream>
+#include <string>
 
 #include "simulation.hpp"
 #include "cellstate_buffer.h"
