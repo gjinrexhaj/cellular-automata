@@ -24,7 +24,9 @@ endif ()
 if(EMSCRIPTEN)
     message("Building for WASM")
     include_directories("./external/raylib-5.5_webassembly/include")
-    include_directories("./external/raylib-5.5_webassembly/lib")
+    link_directories("./external/raylib-5.5_webassembly/lib")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -s USE_GLFW=3 -s ASSERTIONS=1 -s WASM=1 -s ASYNCIFY -s GL_ENABLE_GET_PROC_ADDRESS=1")
+    set(CMAKE_EXECUTABLE_SUFFIX ".html")
 endif()
 
 # Group all sources and headers
