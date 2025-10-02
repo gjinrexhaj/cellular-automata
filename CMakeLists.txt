@@ -62,3 +62,14 @@ if (WIN32)
 else ()
     target_link_libraries(cellular-automata raylib)
 endif ()
+
+
+# Set compile flags for WASM target during program linkage
+if(EMSCRIPTEN)
+    message("Passing WASM-specific linkage flags")
+    target_link_options(
+            cellular-automata
+            PRIVATE
+            -sALLOW_MEMORY_GROWTH=1
+    )
+endif()
