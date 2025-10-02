@@ -27,7 +27,7 @@ file(GLOB_RECURSE SOURCES src/*.cpp)
 file(GLOB_RECURSE HEADERS src/*.h src/*.hpp)
 file(GLOB_RECURSE STYLES styles/*.h)
 
-set(ICON_FILE "AppIcon.icon")
+set(ICON_FILE "AppIcon.icns")
 set(ICON_PATH "./Resources/${ICON_FILE}")
 
 
