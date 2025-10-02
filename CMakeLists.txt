@@ -21,6 +21,11 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     link_directories("./external/raylib-5.5_linux_amd64/lib")
 endif ()
 
+if(EMSCRIPTEN)
+    message("Building for WASM")
+    include_directories("./external/raylib-5.5_webassembly/include")
+    include_directories("./external/raylib-5.5_webassembly/lib")
+endif()
 
 # Group all sources and headers
 file(GLOB_RECURSE SOURCES src/*.cpp)
