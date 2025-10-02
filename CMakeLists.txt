@@ -29,9 +29,12 @@ file(GLOB_RECURSE STYLES styles/*.h)
 
 set(ICON_FILE "AppIcon.icns")
 set(ICON_PATH "./Resources/${ICON_FILE}")
+set(RC_PATH "./Resources/app.rc")
 
 
-add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICON_PATH})
+
+
+add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICON_PATH} ${RC_PATH})
 
 
 
