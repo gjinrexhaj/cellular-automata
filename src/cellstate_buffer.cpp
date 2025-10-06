@@ -79,17 +79,8 @@ int CellstateBuffer::getMaxSize()
     return maximumSize;
 }
 
-// 600 -> 400
-
-// remove first 200
-
-
-
-// 900 -> 600 = 900 - 600
-
 void CellstateBuffer::setMaxSize(int maxSize)
 {
-    // TODO: clean up code
     if (!useMaxSize)
     {
         std::cout << "setMaxSize() failed: useMaxSize = false" << std::endl;
@@ -115,9 +106,6 @@ void CellstateBuffer::setMaxSize(int maxSize)
         buffer.erase(buffer.begin(), buffer.begin() + elementsRemoved);
     }
 }
-
-
-// 900 -> 600 = cut off first 300
 
 void CellstateBuffer::toggleUseMaxSize()
 {
