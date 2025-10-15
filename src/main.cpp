@@ -17,7 +17,6 @@
 // TODO: work on brush size implementation
 // TODO: optimizations + other performance improvements (maybe use multi-threading)
 // TODO: remove guiFocus boolean spaghetti code
-// TODO: impl max buffer size in cellstate_buffer
 
 
 int main()
@@ -68,6 +67,7 @@ int main()
     bool enableFrameAdvance = false;
     bool useBufferLimit = true;
     int bufferMaxSize;
+    double bufferSizeMegabytes;
 
     int selectedDropdownItem = 0;
 
@@ -81,6 +81,8 @@ int main()
     CellstateBuffer cellstateBuffer;
     cellstateBuffer.Advance(simulation.GetCurrentGrid().getCellState());
     bufferMaxSize = cellstateBuffer.getMaxSize();
+
+    size_t bufferSizeBytes = 0;
 
     std::string controls =
         "--- MENU CONTROLS ---\n"
@@ -542,17 +544,24 @@ int main()
             }
 
             std::string bufCounterLabel = std::to_string(cellstateBuffer.Size());
+            std::string memoryUtilizationLabel;
+
             bufCounterLabel = "Buffer Size: " + std::to_string(cellstateBuffer.Size());
             if (cellstateBuffer.isUseMaxSizeEnabled())
             {
                 bufCounterLabel += " / " + std::to_string(cellstateBuffer.getMaxSize());
-
-                if (simulation.IsRunning() && (cellstateBuffer.Size() == cellstateBuffer.getMaxSize()))
-                {
-                    bufCounterLabel += " [trimming]";
-                }
             }
+
+            bufferSizeBytes = cellstateBuffer.getBytesUsed();
+
+
+
+            bufferSizeMegabytes = bufferSizeBytes / (1024.0 * 1024.0);
+            memoryUtilizationLabel = std::format("{:.2f}", bufferSizeMegabytes);
+            memoryUtilizationLabel += " MiB";
+
             GuiLabel({dialogRect.x +10, dialogRect.y +175, 300, 20}, bufCounterLabel.c_str());
+            GuiLabel({dialogRect.x +160, dialogRect.y +175, 300, 20}, memoryUtilizationLabel.c_str());
 
 
             if (GuiCheckBox({dialogRect.x +10, dialogRect.y +205, 20, 20}, "Limit Buffer Size", &useBufferLimit))

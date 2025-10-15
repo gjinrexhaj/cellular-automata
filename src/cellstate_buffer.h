@@ -22,6 +22,8 @@ class CellstateBuffer
         void toggleUseMaxSize();
         bool isUseMaxSizeEnabled();
 
+        size_t getBytesUsed();
+
     private:
         std::vector<std::vector<std::vector<int>>> buffer;
         int maximumSize;
