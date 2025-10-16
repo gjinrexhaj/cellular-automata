@@ -4,6 +4,7 @@
 
 #define RAYGUI_IMPLEMENTATION
 #include "../external/raygui.h"
+
 #include <raylib.h>
 #include <iostream>
 #include <string>
@@ -13,11 +14,15 @@
 #include "../styles/dark_theme.h"
 #include "../styles/light_theme.h"
 
-
 // TODO: work on brush size implementation
 // TODO: optimizations + other performance improvements (maybe use multi-threading)
 // TODO: remove guiFocus boolean spaghetti code
 
+
+void handle_window_events(int& windowWidth, int& windowHeight, bool& autoResizeEnvironment, Simulation& simulation, int& cellSize, auto& selectedSimulationType);
+void place_cell_check(int& cellSize, Simulation& simulation, int& brushSize, bool& allowEditingWhileRunning);
+void erase_cell_check(int& cellSize, Simulation& simulation, int& brushSize, bool& allowEditingWhileRunning);
+void hotkey_check();
 
 int main()
 {
@@ -107,46 +112,11 @@ int main()
     while (!WindowShouldClose())
     {
         // Handle Events
-        if (IsWindowResized())
-        {
-            windowWidth = GetScreenWidth();
-            windowHeight = GetScreenHeight();
-            if (autoResizeEnvironment)
-            {
-                simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
-            }
-        }
+        handle_window_events(windowWidth, windowHeight, autoResizeEnvironment, simulation, cellSize, selectedSimulationType);
 
-        // place cell
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
-        {
-            Vector2 mousePosition = GetMousePosition();
-            int row = mousePosition.y / cellSize;
-            int column = mousePosition.x / cellSize;
-
-            if (!simulation.IsRunning() || allowEditingWhileRunning)
-            {
-                if (simulation.GetCellValue(row, column) == 0)
-                {
-                    simulation.ToggleCell(row, column, brushSize);
-                }
-            }
-        }
-        // remove cell
-        if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
-        {
-            Vector2 mousePosition = GetMousePosition();
-            int row = mousePosition.y / cellSize;
-            int column = mousePosition.x / cellSize;
-
-            if (!simulation.IsRunning() || allowEditingWhileRunning)
-            {
-                if (simulation.GetCellValue(row, column) == 1)
-                {
-                    simulation.ToggleCell(row, column, brushSize);
-                }
-            }
-        }
+        // Cell editing
+        place_cell_check(cellSize, simulation, brushSize, allowEditingWhileRunning);
+        erase_cell_check(cellSize, simulation, brushSize, allowEditingWhileRunning);
 
         // check for hotkey input
         if (IsKeyPressed(KEY_ENTER))
@@ -154,7 +124,12 @@ int main()
             guiFocus1 = false;
             guiFocus2 = false;
             guiFocus3 = false;
-
+            guiFocus4 = false;
+            guiFocus5 = false;
+            guiFocus6 = false;
+            guiFocus7 = false;
+            guiFocus8 = false;
+            guiFocus9 = false;
 
             running = !running;
 
@@ -612,3 +587,54 @@ int main()
     CloseWindow();
     return 0;
 }
+
+
+void handle_window_events(int& windowWidth, int& windowHeight, bool& autoResizeEnvironment, Simulation& simulation, int& cellSize, auto& selectedSimulationType)
+{
+    if (IsWindowResized())
+    {
+        windowWidth = GetScreenWidth();
+        windowHeight = GetScreenHeight();
+        if (autoResizeEnvironment)
+        {
+            simulation = Simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
+        }
+    }
+}
+
+void place_cell_check(int& cellSize, Simulation& simulation, int& brushSize, bool& allowEditingWhileRunning)
+{
+    if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
+    {
+        Vector2 mousePosition = GetMousePosition();
+        int row = mousePosition.y / cellSize;
+        int column = mousePosition.x / cellSize;
+
+        if (!simulation.IsRunning() || allowEditingWhileRunning)
+        {
+            if (simulation.GetCellValue(row, column) == 0)
+            {
+                simulation.ToggleCell(row, column, brushSize);
+            }
+        }
+    }
+}
+
+void erase_cell_check(int& cellSize, Simulation& simulation, int& brushSize, bool& allowEditingWhileRunning)
+{
+    if (IsMouseButtonDown(MOUSE_RIGHT_BUTTON))
+    {
+        Vector2 mousePosition = GetMousePosition();
+        int row = mousePosition.y / cellSize;
+        int column = mousePosition.x / cellSize;
+
+        if (!simulation.IsRunning() || allowEditingWhileRunning)
+        {
+            if (simulation.GetCellValue(row, column) == 1)
+            {
+                simulation.ToggleCell(row, column, brushSize);
+            }
+        }
+    }
+}
+
