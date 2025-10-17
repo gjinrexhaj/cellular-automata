@@ -3,6 +3,8 @@
 //
 
 #define RAYGUI_IMPLEMENTATION
+#include <format>
+
 #include "../external/raygui.h"
 
 #include <raylib.h>
