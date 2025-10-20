@@ -116,7 +116,7 @@ but the procedure is almost the exact same for CLion.
 
 1. **Clone the repository:**
 ```shell
-  git clone https://github.com/gjinrexhaj/java-neural-network.git
+  git clone https://github.com/gjinrexhaj/cellular-automata.git
 ```
 3. **Create a feature branch before working on a new task:**
 ```shell
