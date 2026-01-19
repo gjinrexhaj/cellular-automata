@@ -36,12 +36,16 @@ file(GLOB_RECURSE STYLES styles/*.h)
 
 set(ICON_FILE "AppIcon.icns")
 set(ICON_PATH "./Resources/${ICON_FILE}")
+set(THEME_FILES
+        "styles/custom-dark.rgs"
+        "styles/custom-light.rgs"
+)
 set(RC_PATH "./Resources/app.rc")
 
 
 
 
-add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICON_PATH} ${RC_PATH})
+add_executable(cellular-automata ${SOURCES} ${HEADERS} ${STYLES} ${ICON_PATH} ${RC_PATH} ${THEME_FILES})
 
 
 
@@ -58,8 +62,9 @@ if (APPLE)
             MACOSX_PACKAGE_LOCATION "Resources"
     )
 
-    message("Adding fonts to bundle resource")
-    set_source_files_properties(${APP_FONTS} PROPERTIES
+    # COPY STYLES INTO RESOURCES
+    message("Adding rgs styles to bundle resource")
+    set_source_files_properties(${THEME_FILES} PROPERTIES
             MACOSX_PACKAGE_LOCATION "Resources"
     )
 
@@ -95,11 +100,13 @@ endif()
 
 
 # Explicitly link win multimedia if building for win32
-if (WIN32)
+if(WIN32)
     target_link_libraries(cellular-automata raylib Winmm)
-else ()
+elseif(APPLE)
+    target_link_libraries(cellular-automata raylib "-framework CoreFoundation")
+else()
     target_link_libraries(cellular-automata raylib)
-endif ()
+endif()
 
 
 # Set compile flags for WASM target during program linkage

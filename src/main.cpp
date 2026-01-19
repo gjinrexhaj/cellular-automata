@@ -13,8 +13,14 @@
 
 #include "simulation.hpp"
 #include "cellstate_buffer.h"
-#include "../styles/dark_theme.h"
-#include "../styles/light_theme.h"
+
+#ifdef __APPLE__
+    #include "BundleHelper.h"
+#else
+    #include "../styles/dark_theme.h"
+    #include "../styles/light_theme.h"
+#endif
+
 
 // TODO: work on brush size implementation
 // TODO: optimizations + other performance improvements (maybe use multi-threading)
@@ -81,7 +87,14 @@ int main()
     auto selectedSimulationType = SimulationType::GAME_OF_LIFE;
 
     InitWindow(windowWidth, windowHeight, "Automata Engine: IDLE");
+#ifdef __APPLE__
+    std::string themePath = GetResourcePath() + "/custom-dark.rgs";
+    GuiLoadStyle(themePath.c_str());
+    std::cout << themePath << std::endl;
+
+#else
     GuiLoadStyleDarkTheme();
+#endif
 
     SetTargetFPS(fps);
     Simulation simulation(windowWidth, windowHeight, cellSize, selectedSimulationType);
@@ -439,11 +452,20 @@ int main()
                 if (darkMode)
                 {
                     GuiLoadStyleDefault();
+#if __APPLE__
+                    std::string themePathLocal = GetResourcePath() + "/custom-dark.rgs";
+                    GuiLoadStyle(themePathLocal.c_str());
+#else
                     GuiLoadStyleDarkTheme();
+#endif
                 } else
                 {
-                    GuiLoadStyleDefault();
-                    GuiLoadStyleLightTheme();
+#if __APPLE__
+                    std::string themePathLocal = GetResourcePath() + "/custom-light.rgs";
+                    GuiLoadStyle(themePathLocal.c_str());
+#else
+                    GuiLoadStyleDarkTheme();
+#endif
                 }
             }
 
