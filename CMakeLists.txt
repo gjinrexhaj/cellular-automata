@@ -52,7 +52,45 @@ if (APPLE)
             MACOSX_BUNDLE TRUE
             MACOSX_BUNDLE_ICON_FILE ${ICON_FILE}
     )
-    set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    #set_source_files_properties(${ICON_PATH} PROPERTIES MACOSX_PACKAGE_LOCATION "Resources")
+    message("Adding icon to bundle resource")
+    set_source_files_properties(${ICON_PATH} PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources"
+    )
+
+    message("Adding fonts to bundle resource")
+    set_source_files_properties(${APP_FONTS} PROPERTIES
+            MACOSX_PACKAGE_LOCATION "Resources"
+    )
+
+    # Patch the dylibs into the bundle
+    set_target_properties(${PROJECT_NAME} PROPERTIES
+            BUILD_RPATH "@executable_path/../Frameworks"
+            INSTALL_RPATH "@executable_path/../Frameworks"
+    )
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E make_directory
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/../Frameworks"
+
+            # COPY EACH DYLIB INTO THE BUNDLE
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_SOURCE_DIR}/external/raylib-5.5_macos/lib/libraylib.5.5.0.dylib"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/../Frameworks/libraylib.5.5.0.dylib"
+
+            # Recreate symlinks
+            COMMAND ln -sf
+            "libraylib.5.5.0.dylib"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/../Frameworks/libraylib.550.dylib"
+
+            COMMAND ln -sf
+            "libraylib.550.dylib"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/../Frameworks/libraylib.dylib"
+
+            # Fix install name of the real dylib
+            COMMAND install_name_tool
+            -id "@rpath/libraylib.dylib"
+            "$<TARGET_FILE_DIR:${PROJECT_NAME}>/../Frameworks/libraylib.5.5.0.dylib"
+    )
 endif()
 
 

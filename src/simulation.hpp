@@ -39,6 +39,8 @@ class Simulation {
         Grid temp_grid;
         bool run;
         SimulationType simulationType;
+
+        void ParametrizedAlgorithm();
         void GameOfLifeAlgorithm();
         void TorpedoAlgorithm();
         void DiamondGrowthAlgorithm();

@@ -64,7 +64,7 @@ void Simulation::Update()
         case SimulationType::GAME_OF_LIFE:
             GameOfLifeAlgorithm();
             break;
-    case SimulationType::TORPEDO:
+        case SimulationType::TORPEDO:
             TorpedoAlgorithm();
             break;
         case SimulationType::DIAMOND_GROWTH:
@@ -138,6 +138,71 @@ void Simulation::OverwriteGrid(const std::vector<std::vector<int>>& cellState)
 ////////////////////////////////////
 //  CELLULAR AUTOMATA ALGORITHMS  //
 ////////////////////////////////////
+
+// TODO: impl parametrized algorithm given a ruleset string
+//  example - 4/3,2 (survive if 4 neighbots, born if 3 or 2 neighbors)
+//  also have assymetric parameter, which determines when grid copying occurs
+//  takes in a ruleset object as a parameter, hardcode rs for now
+void Simulation::ParametrizedAlgorithm()
+{
+    std::vector<int> survivalConditions;
+    survivalConditions.push_back(4);
+
+    std::vector<int> birthConditions;
+    birthConditions.push_back(3);
+    birthConditions.push_back(2);
+
+    bool asymetric = false;
+
+    // Loop through entire grid
+    for (int row = 0; row < grid.GetRows(); row++)
+    {
+        for (int column = 0; column < grid.GetColumns(); column++)
+        {
+            int liveNeighbors = CountLiveNeighbors(row, column);
+            int cellValue = grid.GetValue(row, column);
+
+            // check the survival condtions if alive
+            if (cellValue == 1)
+            {
+                bool metCondition = false;
+                for (auto survivalCondition : survivalConditions)
+                {
+                    if (liveNeighbors == survivalCondition)
+                    {
+                        temp_grid.SetValue(row, column, 1);
+                        metCondition = true;
+                    }
+                }
+                if (!metCondition)
+                {
+                    temp_grid.SetValue(row, column, 0);
+                }
+            }
+            // else if dead, check the birth condition
+            else if (liveNeighbors == 0)
+            {
+                for (auto birthCondition : birthConditions)
+                {
+                    if (liveNeighbors == birthCondition)
+                    {
+                        temp_grid.SetValue(row, column, 1);
+                    }
+                }
+            }
+        }
+        if (asymetric)
+        {
+            grid = temp_grid;
+        }
+    }
+    if (!asymetric)
+    {
+        grid = temp_grid;
+    }
+}
+
+
 void Simulation::GameOfLifeAlgorithm()
 {
     // Game of life rules
